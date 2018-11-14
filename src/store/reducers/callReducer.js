@@ -2,7 +2,6 @@ import { appConsts } from '../../constants';
 
 const {
   // Add Call -> Select Rcurring Type Screen
-  listColorSelectReducer,
   rdRecurringTypeSelectReducer,
   rdRecurringEndDateTypeSelectReducer,
 
@@ -28,17 +27,6 @@ export const callReducer = (state = defaultStateModel, action) => {
   console.log('state: ', state);
 
   switch(action.type) {
-
-    case listColorSelectReducer:
-      const colorObj = Object.assign({}, state.addCall, {
-        color: action.color,
-        extraData_callColors: !state.addCall.extraData_callColors
-      });
-      console.log('colorObj: ', colorObj);
-      return Object.assign({}, state, {
-        addCall: colorObj
-      });
-      break;
 
     case rdRecurringTypeSelectReducer:
       const recurringObj = Object.assign({}, state.addCall.recurring, {

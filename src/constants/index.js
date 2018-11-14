@@ -22,7 +22,6 @@ export const FONTS = {
 
 export const appConsts = {
   // Add Call -> Select Rcurring Type Screen
-  listColorSelectReducer: 'LIST_COLOR_SELECT',
   rdRecurringTypeSelectReducer: 'RD_RECURRING_TYPE_SELECT_REDUCER',
   rdRecurringEndDateTypeSelectReducer: 'RD_RECURRING_END_DATE_TYPE_SELECT_REDUCER',
   txtRecurringDateSetReducer: 'TXT_RECURRING_DATE_SET_REDUCER',

@@ -6,7 +6,6 @@ export const asyncStorageMiddleware = store => next => action => {
 
   const {
     // CALL
-    listColorSelectReducer,
     rdRecurringTypeSelectReducer,
     rdRecurringEndDateTypeSelectReducer,
     txtRecurringDateSetReducer,
@@ -21,7 +20,7 @@ export const asyncStorageMiddleware = store => next => action => {
     clearUser,
     refreshToken
    } = appConsts;
-  const actions = [ listColorSelectReducer, rdRecurringTypeSelectReducer, rdRecurringEndDateTypeSelectReducer, txtRecurringDateSetReducer,     addTodo, doneTodo,      authWithSAML, authSuccess, clearUser, refreshToken ];
+  const actions = [ rdRecurringTypeSelectReducer, rdRecurringEndDateTypeSelectReducer, txtRecurringDateSetReducer,     addTodo, doneTodo,      authWithSAML, authSuccess, clearUser, refreshToken ];
 
   if (actions.includes(action.type)) {
     console.log("action.type$$: ", action.type);
@@ -29,7 +28,6 @@ export const asyncStorageMiddleware = store => next => action => {
     //saveState({ user: store.getState().user });
     let saveIn = '';
     switch (action.type) {
-      case listColorSelectReducer:
       case rdRecurringTypeSelectReducer:
       case rdRecurringEndDateTypeSelectReducer:
       case txtRecurringDateSetReducer:

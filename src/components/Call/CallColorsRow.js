@@ -46,12 +46,9 @@ export default class CallColorsRow extends Component {
     super(props);
 
     this.onColorSelect = this.onColorSelect.bind(this);
-    console.log('CallColorsRow -> this.props.item: ', this.props.item);
-    console.log('CallColorsRow -> this.props: ', this.props);
   }
 
   onColorSelect(color) {
-    console.log('CallColorsRow -> this.props.item: ', this.props.item);
     this.props.onColorSelect(color);
   }
   //<TouchableHighlight style={styles.doneButton} onPress={this.onDonePressed}></TouchableHighlight>
@@ -60,11 +57,11 @@ export default class CallColorsRow extends Component {
     const item = this.props.item;
     const keyColor = Object.keys(item)[0];
     let varColor = callColors[keyColor];
-    console.log('this.props.addCall.color ==> ', this.props.addCall.color);
-    console.log('keyColor ::> ', keyColor);
+    //console.log('this.props.addCall.color ==> ', this.props.addCall.color);
+    //console.log('keyColor ::> ', keyColor);
 
     return (
-      <Icon name={this.props.addCall.color == keyColor ? 'check-circle' : 'fiber-manual-record'} color={varColor} size={45}
+      <Icon name={this.props.color == keyColor ? 'check-circle' : 'fiber-manual-record'} color={varColor} size={45}
       onPress={() => {this.onColorSelect(keyColor);}}
       />
     )

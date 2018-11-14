@@ -6,7 +6,6 @@ import { appConsts } from '../../constants';
 //import OhLogoWhite from '../../../assets/images/OhLogoWhite/OhLogoWhite.png';
 
 const {
-  listColorSelectReducer,
   rdRecurringTypeSelectReducer,
   rdRecurringEndDateTypeSelectReducer,
   txtRecurringDateSetReducer,
@@ -32,20 +31,6 @@ const {
 } = appConsts;
 
 export const addCallActions = {
-
-  onColorSelect(color) {
-    return (dispatch) => {
-      console.log("onColorSelect pressed: ", color);
-      // let filteredTodos = this.state.todos.filter((fTodo) => {
-      //   return fTodo !== color; 
-      // });
-      // this.setState({ todos: filteredTodos });
-      dispatch({
-        type: listColorSelectReducer,
-        color: color
-      });
-    };
-  },
 
   onRecurringTypeSelect(type) {
     console.log(type);
