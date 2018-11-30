@@ -224,6 +224,7 @@ export default class AddCallScreen extends Component {
               onFocus={() => { this.setState({ isFocusedPhoneNumber: true }) }}
               onEndEditing={() => { this.setState({ isFocusedPhoneNumber: false }) }}
               value={this.state.phoneNumber}
+              onChangeText={(phoneNumber) => this.setState({phoneNumber})}
             />
           </View>
           <View style={styles.colRight}>
@@ -341,6 +342,7 @@ export default class AddCallScreen extends Component {
               onFocus={() => { this.setState({ isFocusedNote: true }) }}
               onEndEditing={() => { this.setState({ isFocusedNote: false }) }}
               value={this.state.note}
+              onChangeText={(note) => this.setState({note})}
             />
           </View>
           <View style={styles.colRight}>

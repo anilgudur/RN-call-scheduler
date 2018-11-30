@@ -1,26 +1,21 @@
 import Config from 'react-native-config';
 
-export const COLORS = {
-  red: '#DA342B',
-  yellow: '#FDEA3A',
-  white: '#FFFFFF',
-  black: '#000000',
-  tuatara: '#3B3A39',
-  grey: '#E9E9E9',
-  mercury_gray: '#E5E5E5',
-  cod_gray: '#1C1B1A', // rgba(28, 27, 26, 1)
-  cod_gray_dis: 'rgba(155, 155, 155, 0.7)',
-  silver: '#CBCBCB',
-  green: '#24C26C',
-  trans: 'transparent',
+/**
+ * Localstorage Keys
+ */
+export const STORAGE_KEYS = {
+  DB_VERSION: 'dbVersion',
+  isTnCAccepted: 'isTnCAccepted', // Not used
+  userSetupSavedObj: 'userSetupSavedObj', // Not used
 };
 
-export const FONTS = {
-  condMedium: 'ConduitITCStd-Medium',
-  condLight: 'ConduitITCStd-Light',
-};
-
+/**
+ * App Constants
+ */
 export const appConsts = {
+
+  drawerVersion: "1",
+
   // Add Call -> Select Rcurring Type Screen
   rdRecurringTypeSelectReducer: 'RD_RECURRING_TYPE_SELECT_REDUCER',
   rdRecurringEndDateTypeSelectReducer: 'RD_RECURRING_END_DATE_TYPE_SELECT_REDUCER',
@@ -134,6 +129,42 @@ export const appConsts = {
   openPopup: 'OPEN_TIMER_POPUP',
   setTimerID: 'SET_WAITING_TIMER_ID',
   clearTimerID: 'CLEAR_WAITING_TIMER_ID',
+};
+
+/**
+ * Localstorage Keys
+ */
+export const ERROR_CODES = {
+  STORAGE_SERVICE: {
+    save: 6.1,
+    get: 6.2,
+    multiSave: 6.3,
+    multiGet: 6.4
+  }
+};
+
+
+
+
+
+export const COLORS = {
+  red: '#DA342B',
+  yellow: '#FDEA3A',
+  white: '#FFFFFF',
+  black: '#000000',
+  tuatara: '#3B3A39',
+  grey: '#E9E9E9',
+  mercury_gray: '#E5E5E5',
+  cod_gray: '#1C1B1A', // rgba(28, 27, 26, 1)
+  cod_gray_dis: 'rgba(155, 155, 155, 0.7)',
+  silver: '#CBCBCB',
+  green: '#24C26C',
+  trans: 'transparent',
+};
+
+export const FONTS = {
+  condMedium: 'ConduitITCStd-Medium',
+  condLight: 'ConduitITCStd-Light',
 };
 
 export const API = {
