@@ -10,6 +10,16 @@ export const STORAGE_KEYS = {
 };
 
 /**
+ * Localstorage Keys
+ */
+export const DB_CONFIG = {
+  databaseName: 'Test.db',
+  databaseVersion: '1.0',
+  databaseDisplayname: 'SQLite Test Database',
+  database_size: 200000
+};
+
+/**
  * App Constants
  */
 export const appConsts = {
@@ -141,6 +151,13 @@ export const ERROR_CODES = {
     multiSave: 6.3,
     multiGet: 6.4
   }
+};
+
+/**
+ * DB Table Constants
+ */
+export const TABLES = {
+  TBL_CALL_ADDED: 'tbl_call_added'
 };
 
 

@@ -9,8 +9,11 @@ import RtcStatusBar from '../../components/baseComponents/RtcStatusBar';
 
 // Services
 import AppService from "../../Services/AppService";
+import DB from "../../Services/DBDefinitionService";
 
 const BG_WHITE_OPACITY = 'rgba(0, 0, 0, 0.7)'; //'rgba(68, 68, 68, 1)'
+
+let db;
 
 //@withoutHandleBackPress
 export default class Application extends PureComponent {
@@ -20,9 +23,10 @@ export default class Application extends PureComponent {
 
   componentDidMount() {
 
+    // SQLite Database
     AppService.getDbVersion().then((dbVersion) => {
-      console.log('dbVersion: ', dbVersion);
       let isDbVersionChanged = true;
+      console.log('dbVersion: ', dbVersion);
       if (dbVersion) {
           // if (dbVersion == DB_CONFIG.dbVersion) {
           //     isDbVersionChanged = false;
@@ -30,13 +34,14 @@ export default class Application extends PureComponent {
       }
       if (isDbVersionChanged === true) {
         // AppService.saveDbVersion(DB_CONFIG.dbVersion).then((result) => {
-        //   //this.db_init(isDbVersionChanged);
+        //   //this.DBInit(isDbVersionChanged);
         // });
       } else {
-        //this.db_init(isDbVersionChanged);
+        //this.DBInit(isDbVersionChanged);
       }
     }).catch(error => {
       console.log('dbVersion error:: ', error);
+      this.DBInit(true);
     });
 
     // device never go to sleep mode
@@ -45,6 +50,45 @@ export default class Application extends PureComponent {
 
   componentWillUnmount() {
     //KeepAwake.deactivate();
+  }
+
+  /**
+   * Database Initialization
+   * @param {*} isDbVersionChanged - is Db Version Changed
+   */
+  async DBInit(isDbVersionChanged) {
+    console.log('isDbVersionChanged ', isDbVersionChanged);
+    await DB.init(isDbVersionChanged).then((res) => {
+      console.log('DB.init( success ', res);
+      
+      /* appService.device_info_save().then((res) => {
+
+        // Check screen
+        appService.getTnCInfo((err, isTnCAccepted) => {
+          if (err == null) {
+            setupService.isSetupEmpty().then((result) => {
+              if (result) {
+                this.setState({ setupOrScheduleRoute: 'SetupStackRoute', checkedApp: true, isTnCAccepted: isTnCAccepted });
+              } else {
+                this.setState({ setupOrScheduleRoute: 'ScheduleListingkRoute', checkedApp: true, isTnCAccepted: isTnCAccepted });
+              }
+            });
+          } else {
+            this.setState({
+              checkedApp: true, isTnCAccepted: false
+            });
+          }
+        });
+        // End: Check screen
+
+      }).catch((err) => {
+      });
+      */
+
+    }).catch((err) => {
+      console.log('DB.init( error ', err);
+    });
+
   }
 
   render() {
