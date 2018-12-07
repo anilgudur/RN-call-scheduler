@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { View, Text, TextInput, DatePickerAndroid, TimePickerAndroid, TouchableHighlight, FlatList } from "react-native";
 import PropTypes from 'prop-types';
 import { AddCallHeader } from "../../Header/Headers";
-import { Icon } from 'react-native-elements';
-import { addCallScreen as styles, colors as stylesColors } from '../../Styles/Styles';
+import { Icon, FormValidationMessage } from 'react-native-elements';
+import { addCallScreen as styles, colors as stylesColors, global as gStyle } from '../../Styles/Styles';
 import moment from 'moment';
 import { I18n } from 'react-redux-i18n';
 import CallColorsRow from './CallColorsRow';
@@ -12,26 +12,15 @@ import { selectContactPhone } from 'react-native-select-contact';
 const {
   callColorOptions, rdOptionRecurring, rdOptionRecurringEndDate
 } = appConsts;
+import ValidationComponent from "../../Validator/index";
+import CallService from "../../Services/CallService";
 
-export default class AddCallScreen extends Component {
+export default class AddCallScreen extends ValidationComponent {
 
   static propTypes = {
     //screenProps: PropTypes.shape({
     onAddPress: PropTypes.func.isRequired,
     //}).isRequired
-  };
-
-  static navigationOptions = ({ navigation, screenProps }) => //(
-  {
-    const { navigate } = navigation;
-    return {
-      headerLeft: null,
-      headerTitle: <AddCallHeader
-        navigation={navigation}
-        titleName={"Privacy Policy"}
-      />,
-      headerRight: null
-    }
   };
 
   constructor(props) {
@@ -54,17 +43,158 @@ export default class AddCallScreen extends Component {
       isFocusedPhoneNumber: false,
       isFocusedDate: false,
       isFocusedTime: false,
-      isFocusedNote: false
+      isFocusedNote: false,
+
+      phoneNumber_error: false,
+
+      phoneNumber_error_message: '',
     }
 
+    this.handleOnPhoneNumberChange = this.handleOnPhoneNumberChange.bind(this);
     this.openDate = this.openDate.bind(this);
     this.openTime = this.openTime.bind(this);
     this.openRecurring = this.openRecurring.bind(this);
     this.onColorSelect = this.onColorSelect.bind(this);
     this.getPhoneNumber = this.getPhoneNumber.bind(this);
 
+    this.onCallSavePressed = this.onCallSavePressed.bind(this);
+
     this.onAddPress = this.onAddPress.bind(this);
     this.onCancelPress = this.onCancelPress.bind(this);
+  }
+
+  static navigationOptions = ({ navigation, screenProps }) => //(
+  {
+    const { state, setParams, navigate } = navigation;
+    const params = state.params || {};
+
+    return {
+      headerLeft: null,
+      headerTitle: <AddCallHeader
+        navigation={navigation}
+        handleOnCallSavePress={params.handleOnCallSavePress}
+        titleName={"Privacy Policy"}
+      />,
+      headerRight: null
+    }
+  };
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      handleOnCallSavePress: this.onCallSavePressed
+    });
+  }
+
+  onCallSavePressed() {
+
+    // Call ValidationComponent validate method
+    this.validate({
+      phoneNumber: { required: true }
+    });
+
+    // Phone Number
+    if (this.isFieldInError('phoneNumber')) {
+      let errorType = '', errorMessage = '';
+      let errorObj = this.getErrorMessage('phoneNumber');
+      if (errorObj.messages.required !== undefined) {
+        errorType = 'required';
+        errorMessage = errorObj.messages.required.replace("{fieldName}", 'Phone number');
+      }
+      this.setState({
+        phoneNumber_error: true,
+        phoneNumber_error_message: errorMessage
+      });
+    } else {
+      this.setState({
+        phoneNumber_error: false,
+        phoneNumber_error_message: '',
+      }, () => {
+        this.onCallSaveValid(this.isFormValid());
+      });
+    }
+
+  }
+
+  onCallSaveValid(varIsFormValid) {
+    if (varIsFormValid && !this.state.phoneNumber_error) {
+      let saveObj = {
+        contactName: this.state.contactName,
+        phoneNumber: this.state.phoneNumber,
+        date: this.state.date,
+        color: this.state.color,
+        note: this.state.note,
+        recurring: this.props.addCall.recurring
+      };
+      console.log('Validation success -->> saveObj: ', saveObj);
+      CallService.saveCall().then((res) => {
+        console.log("res: ", res);
+      }).catch((err) => {
+        console.log("Error: ", err);
+      })
+    }
+  }
+
+  /**
+   * On Phone Number Change
+   * @param {*} text - text
+   */
+  handleOnPhoneNumberChange(text) {
+    if (text != "") {
+      this.setState({ phoneNumber: text }, () => {
+
+        const regExPhoneNumber = /^[0-9 \-\(\)]+$/;
+        if (regExPhoneNumber.test(text)) {
+          this.setState({ phoneNumber: text }, () => {
+            this.validatePhoneNumber();
+          });
+          this.setState({
+            //isOnlyNumberHyphen: true,
+            phoneNumber_error: false,
+            phoneNumber_error_message: '',
+          });
+        } else {
+          // if (isOnSubmit === true || this.state.phoneNumber_error) {
+            this.setState({
+              //isOnlyNumberHyphen: false,
+              phoneNumber_error: true,
+              phoneNumber_error_message: "Phone number should have numbers, - and ( ) only."
+            });
+          // }
+        }
+      });
+    } else {
+        this.setState({ phoneNumber: text }, () => {
+          this.validatePhoneNumber();
+        });
+    }
+  }
+
+  /**
+   * Validate Phone Number
+   */
+  validatePhoneNumber() {
+    // Call ValidationComponent validate method
+    this.validate({
+      phoneNumber: { required: true },
+    });
+
+    if (this.isFieldInError('phoneNumber')) {
+      let errorType = '', errorMessage = '';
+      let errorObj = this.getErrorMessage('phoneNumber');
+      if (errorObj.messages.required !== undefined) {
+        errorType = 'required';
+        errorMessage = errorObj.messages.required.replace("{fieldName}", 'Phone number');
+      }
+      this.setState({
+        phoneNumber_error: true,
+        phoneNumber_error_message: errorMessage
+      });
+    } else {
+      this.setState({
+        phoneNumber_error: false,
+        phoneNumber_error_message: '',
+      });
+    }
   }
 
 
@@ -137,6 +267,8 @@ export default class AddCallScreen extends Component {
         this.setState({
           contactName: contact.name,
           phoneNumber: selectedPhone.number
+        }, () => {
+          this.handleOnPhoneNumberChange(selectedPhone.number)
         });
         return selectedPhone.number;
       });
@@ -201,6 +333,7 @@ export default class AddCallScreen extends Component {
               selectionColor={stylesColors.selection_color}
               editable={false}
               value={this.state.contactName}
+              maxLength={110}
             />
           </View>
           <View style={styles.colRight}>
@@ -215,7 +348,6 @@ export default class AddCallScreen extends Component {
           <View style={[styles.inputView, this.state.isFocusedPhoneNumber ? { borderBottomColor: stylesColors.text_input_border_bottom_color_active } : { borderBottomColor: stylesColors.text_input_border_bottom_color }]}>
             <TextInput
               style={styles.input}
-              //onChangeText={this.onChange.bind(this)} 
               placeholder="Phone number"
               placeholderTextColor={stylesColors.place_holder_text_color}
               selectionColor={stylesColors.selection_color}
@@ -224,12 +356,34 @@ export default class AddCallScreen extends Component {
               onFocus={() => { this.setState({ isFocusedPhoneNumber: true }) }}
               onEndEditing={() => { this.setState({ isFocusedPhoneNumber: false }) }}
               value={this.state.phoneNumber}
-              onChangeText={(phoneNumber) => this.setState({phoneNumber})}
+              //onChangeText={(phoneNumber) => this.setState({phoneNumber})}
+              onChangeText={(text) => this.handleOnPhoneNumberChange(text)}
+              maxLength={20}
             />
           </View>
+
           <View style={styles.colRight}>
           </View>
         </View>
+
+        {
+          this.state.phoneNumber_error &&
+          <View style={[styles.row, styles.firstRow, {paddingTop:0}]}>
+            <View style={styles.colLeft}>
+            </View>
+            <View style={{flex:1}}>
+              <FormValidationMessage
+                labelStyle={gStyle.formValidationMessage}
+              >
+                {
+                  this.state.phoneNumber_error_message
+                }
+              </FormValidationMessage>
+            </View>
+            <View style={styles.colRight}>
+            </View>
+          </View>
+        }
 
         <View style={[styles.row]}>
           <View style={styles.colLeft}>
@@ -343,6 +497,7 @@ export default class AddCallScreen extends Component {
               onEndEditing={() => { this.setState({ isFocusedNote: false }) }}
               value={this.state.note}
               onChangeText={(note) => this.setState({note})}
+              maxLength={255}
             />
           </View>
           <View style={styles.colRight}>

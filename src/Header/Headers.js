@@ -31,6 +31,7 @@ export class MenuTitle extends Component {
 export class AddCallHeader extends Component {
   render() {
     const { navigate } = this.props.navigation;
+    console.log('AddCallHeader this.props: ', this.props);
     return (
       <View style={css.addCallHeader.container}>
         <View style={css.addCallHeader.block}>
@@ -49,12 +50,12 @@ export class AddCallHeader extends Component {
         </View>
         <View style={css.addCallHeader.block}>
           <TouchableHighlight
-            onPress={() => console.log('pressed')}
+            onPress={() => this.props.handleOnCallSavePress()}
             underlayColor={css.colors.button_underlay_color}
             style={css.addCallHeader.touchable}
           >
             <View style={css.addCallHeader.touchableView}>
-              <Icon name='done' color={css.colors.header_icon_color} size={25} onPress={() => navigate('AddCallRoute')} />
+              <Icon name='done' color={css.colors.header_icon_color} size={25} />
               <Text style={css.addCallHeader.text} numberOfLines={1}>
                 Done
               </Text>

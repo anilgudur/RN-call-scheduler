@@ -13,8 +13,6 @@ const {
 
 const defaultStateModel = {
   addCall: {
-    color: 'white',
-    extraData_callColors: false,
     recurring: {
       on: rdOptionRecurring.doNotRepeat,
       endDateType: rdOptionRecurringEndDate.forever,

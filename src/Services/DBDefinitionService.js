@@ -1,6 +1,8 @@
 'use strict';
 //import { CONFIG } from "../../Config/Environment/EnvironmentConfig";
-import { DB_CONFIG } from '../Config/DBConfig';
+import {
+  DB_CONFIG
+} from '../Config/DBConfig';
 import SQLite from 'react-native-sqlite-storage';
 SQLite.DEBUG(true);
 SQLite.enablePromise(true);
@@ -23,11 +25,11 @@ class DBDefinitionService {
     return new Promise((resolve, reject) => {
       try {
         SQLite.echoTest().then(() => {
-          console.log("1. Integrity check passed ...");
-          console.log("Opening database ...");
+          console.log("db -> 1. Integrity check passed ...");
+          console.log("db -> Opening database ...");
           SQLite.openDatabase(DB_CONFIG.dbName, DB_CONFIG.dbVersion, DB_CONFIG.dbDisplayname, DB_CONFIG.dbSize).then((DB) => {
             this.db = DB;
-            console.log("Database OPENED");
+            console.log("db -> Database OPENED");
             this.populateDatabase(DB).then(res => {
               resolve(true);
             }).catch(err => {
@@ -38,7 +40,7 @@ class DBDefinitionService {
             resolve(false);
           });
         }).catch(error => {
-          console.log("echoTest failed - plugin not functional");
+          console.log("db -> echoTest failed - plugin not functional");
           //console.log("echoTest failed - plugin not functional");
           resolve(true);
         });
@@ -54,23 +56,23 @@ class DBDefinitionService {
    */
   populateDatabase(db) {
     return new Promise((resolve, reject) => {
-      console.log("Database integrity check");
+      console.log("db -> Database integrity check");
       db.executeSql('SELECT 1 FROM tbl_call_added LIMIT 1').then(() => {
-        console.log("Database is ready ... executing query ...");
+        console.log("db -> Database is ready ... executing query ...");
         resolve(true);
         // db.transaction(this.queryEmployees).then(() => {
-        //   console.log("Processing completed")
+        //   console.log("db -> Processing completed")
         // });
-      }).catch((error) =>{
-        console.log("Received error: ", error);
-        console.log("Database not yet ready ... populating data");
-        db.transaction(this.populateDB).then(() =>{
-          console.log("Database populated ... executing query ...");
+      }).catch((error) => {
+        console.log("db -> Received error: ", error);
+        console.log("db -> Database not yet ready ... populating data");
+        db.transaction(this.populateDB).then(() => {
+          console.log("db -> Database populated ... executing query ...");
           this.closeDatabase();
           resolve(true);
           // db.transaction(this.queryEmployees).then((result) => {
-          //   console.log("Transaction is now finished");
-          //   console.log("Processing completed");
+          //   console.log("db -> Transaction is now finished");
+          //   console.log("db -> Processing completed");
           // });
         });
       });
@@ -82,46 +84,76 @@ class DBDefinitionService {
    * Populate DB
    */
   populateDB = (tx) => {
-    console.log("Executing DROP stmts");
+    console.log("db -> Executing DROP stmts");
 
     // Drop tables
     DB_CONFIG.tables.forEach((table) => {
-      console.log('table: ', table);
-      tx.executeSql('DROP TABLE IF EXISTS '+ table.name +';');
+      console.log('db -> table: ', table);
+      tx.executeSql('DROP TABLE IF EXISTS ' + table.name + ';');
     });
 
     // CREATE tables
-    console.log("Executing CREATE stmts");
+    console.log("db -> Executing CREATE stmts");
     DB_CONFIG.tables.forEach((table) => {
       let columns = [];
       table.columns.forEach((column) => {
-          columns.push(column.name + ' ' + column.type);
+        columns.push(column.name + ' ' + column.type);
       });
       let query = 'CREATE TABLE IF NOT EXISTS ' + table.name + ' (' + columns.join(',') + ');';
-      console.log('query:: ', query);
+      console.log('db -> query:: ', query);
       tx.executeSql(query).catch((error) => {
-        console.log('Error executeSql: ', error);
+        console.log('db -> Error executeSql: ', error);
         //this.errorCB(error);
       });
     });
 
-    console.log("all config SQL done");
+    console.log("db -> all config SQL done");
   };
 
   closeDatabase = () => {
     if (this.db) {
-      console.log("Closing database ...");
-      console.log("Closing DB");
+      console.log("db -> Closing database ...");
+      console.log("db -> Closing DB");
       this.db.close().then((status) => {
-        console.log("Database CLOSED");
+        console.log("db -> Database CLOSED");
       }).catch((error) => {
-        console.log("closeDatabase error", error);
+        console.log("db -> closeDatabase error", error);
       });
     } else {
-      console.log("Database was not OPENED")
+      console.log("db -> Database was not OPENED")
     }
   };
 
+  /**
+   * execute query
+   */
+  query = (query, bindings) => {
+    return new Promise((resolve, reject) => {
+
+      bindings = typeof bindings !== 'undefined' ? bindings : [];
+
+      this.db.transaction((transaction) => {
+
+        if (Array.isArray(query)) {
+          for (var i = 0; i < query.length; i++) {
+            transaction.executeSql(query[i], bindings, (transaction, result) => {
+              resolve(result);
+            }, (transaction, error) => {
+              reject(error);
+            });
+          }
+        } else {
+          transaction.executeSql(query, bindings, (transaction, result) => {
+            resolve(result);
+          }, (transaction, error) => {
+            reject(error);
+          });
+        }
+
+      });
+
+    });
+  }
 
 }
 

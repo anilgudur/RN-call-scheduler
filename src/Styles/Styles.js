@@ -146,6 +146,10 @@ export const global = StyleSheet.create({
   },
   radioLabel: {
     paddingLeft:5
+  },
+
+  formValidationMessage: {
+    marginLeft: 0
   }
 });
 

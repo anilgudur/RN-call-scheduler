@@ -26,7 +26,7 @@ export default class Application extends PureComponent {
     // SQLite Database
     AppService.getDbVersion().then((dbVersion) => {
       let isDbVersionChanged = true;
-      console.log('dbVersion: ', dbVersion);
+      console.log('db -> dbVersion: ', dbVersion);
       if (dbVersion) {
           // if (dbVersion == DB_CONFIG.dbVersion) {
           //     isDbVersionChanged = false;
@@ -40,7 +40,7 @@ export default class Application extends PureComponent {
         //this.DBInit(isDbVersionChanged);
       }
     }).catch(error => {
-      console.log('dbVersion error:: ', error);
+      console.log('db -> dbVersion error:: ', error);
       this.DBInit(true);
     });
 
@@ -57,9 +57,9 @@ export default class Application extends PureComponent {
    * @param {*} isDbVersionChanged - is Db Version Changed
    */
   async DBInit(isDbVersionChanged) {
-    console.log('isDbVersionChanged ', isDbVersionChanged);
+    console.log('db -> isDbVersionChanged ', isDbVersionChanged);
     await DB.init(isDbVersionChanged).then((res) => {
-      console.log('DB.init( success ', res);
+      console.log('db -> DB.init( success ', res);
       
       /* appService.device_info_save().then((res) => {
 
@@ -86,7 +86,7 @@ export default class Application extends PureComponent {
       */
 
     }).catch((err) => {
-      console.log('DB.init( error ', err);
+      console.log('db -> DB.init( error ', err);
     });
 
   }

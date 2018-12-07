@@ -14,8 +14,8 @@ export const DB_CONFIG = {
         name: TABLES.TBL_CALL_ADDED,
         columns: [
             {name: '_id', type: 'INTEGER PRIMARY KEY AUTOINCREMENT'},
-            {name: 'contact_name', type: 'VARCHAR(55)'},
-            {name: 'phone_number', type: 'VARCHAR(14)'},
+            {name: 'contact_name', type: 'VARCHAR(110)'},
+            {name: 'phone_number', type: 'VARCHAR(20)'},
             {name: 'schedule_date', type: 'DATETIME'},
             {name: 'color_type_id', type: 'TINYINT(3)'},
             {name: 'note', type: 'VARCHAR(255)'},
