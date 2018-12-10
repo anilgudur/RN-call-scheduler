@@ -4,8 +4,11 @@ const {
   // Add Call -> Select Rcurring Type Screen
   rdRecurringTypeSelectReducer,
   rdRecurringEndDateTypeSelectReducer,
-
   txtRecurringDateSetReducer,
+
+  // On Call Save
+  onCallSaveSuccessReducer,
+
 
   rdOptionRecurring,
   rdOptionRecurringEndDate
@@ -65,6 +68,16 @@ export const callReducer = (state = defaultStateModel, action) => {
         console.log('addCallObj3: ', addCallObj3);
         return Object.assign({}, state, {
           addCall: addCallObj3
+        });
+        break;
+
+      case onCallSaveSuccessReducer:
+        const addCallObj4 = Object.assign({}, state.addCall, {
+          recurring: defaultStateModel.addCall.recurring
+        });
+        console.log('addCallObj4: ', addCallObj4);
+        return Object.assign({}, state, {
+          addCall: addCallObj4
         });
         break;
 

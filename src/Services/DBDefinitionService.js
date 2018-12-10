@@ -155,6 +155,17 @@ class DBDefinitionService {
     });
   }
 
+  /**
+   * fetchAll
+   */
+  fetchAll = (result) => {
+    var output = [];
+    for (var i = 0; i < result.rows.length; i++) {
+      output.push(result.rows.item(i));
+    }
+    return output;
+  }
+
 }
 
 module.exports = new DBDefinitionService();

@@ -14,55 +14,52 @@ class CallService {
       var querydata = {};
       querydata.tbname = TABLES.TBL_CALL_ADDED;
       querydata.data = data;
+      console.log('querydata:: ', querydata);
       DBService.insertData(querydata).then((res) => {
-        if (res < 0) {
-          querydata.data = {};
-          querydata.columns = [{
-            name: 'CompanySN',
-            data: data.CompanySN
-          }, {
-            name: 'UserID',
-            data: data.UserID
-          }, {
-            name: 'Password',
-            data: data.Password
-          }, {
-            name: 'PIN',
-            data: data.PIN
-          }, {
-            name: 'WifiOnly',
-            data: data.WifiOnly
-            // }, {                                     //Remove the comment once autoUploadPhoto column gets added
-            //     name: 'AutoUploadPhoto',
-            //     data: data.autoUploadPhoto
-          }, {
-            name: 'ServiceUserID',
-            data: "evosus"
-          }, {
-            name: 'ServicePassword',
-            data: "evosus7414"
-          }, {
-            name: 'LastReceived',
-            data: "2014-05-01T00:00:00Z"
-          }];
-          querydata.cond = [{
-            name: '_id',
-            data: 1
-          }];
-          DBService.updateData(querydata);
-          resolve({
-            success: true,
-            saveType: 'updated'
-          });
-        } else {
-          resolve({
-            success: true,
-            saveType: 'saved'
-          });
-        }
+        console.log('CallService saveCall: ', res);
+        resolve({
+          success: true,
+          saveType: 'SAVED'
+        });
+      }).catch(err => {
+        console.log("CallService saveCall Error: ", err);
+        reject(err);
       });
+    });
+  }
 
-      resolve("In Call Service");
+  /*
+   * Get Call List
+   */
+  getCallList() {
+    console.log("In getCallList");
+    return new Promise((resolve, reject) => {
+
+      try {
+        let querydata = {};
+        querydata.tbname = TABLES.TBL_CALL_ADDED;
+        querydata.columns = [
+            '_id',
+            'contact_name',
+            'phone_number',
+            'schedule_date',
+            'color_type_id',
+            'note',
+            'recurring_type_id',
+            'recurring_end_date_type_id',
+            'recurring_end_date'
+        ];
+        querydata.cond = [{
+            name: 'is_call_completed', data: 0
+        }];
+        DBService.getDataList(querydata, 'schedule_date').then((result) => {
+          console.log('result:: ', result);
+          resolve('result:: ', result);
+        });
+      } catch (err) {
+        reject(false);
+      }
+
     });
   }
 

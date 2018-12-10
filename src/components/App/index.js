@@ -11,15 +11,26 @@ import RtcStatusBar from '../../components/baseComponents/RtcStatusBar';
 import AppService from "../../Services/AppService";
 import DB from "../../Services/DBDefinitionService";
 
+import { DB_CONFIG } from '../../Config/DBConfig';
+
 const BG_WHITE_OPACITY = 'rgba(0, 0, 0, 0.7)'; //'rgba(68, 68, 68, 1)'
 
 let db;
 
 //@withoutHandleBackPress
 export default class Application extends PureComponent {
+
   static propTypes = {
     initialUser: PropTypes.shape({}),
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isAppLoaded: false
+    }
+  }
 
   componentDidMount() {
 
@@ -28,20 +39,32 @@ export default class Application extends PureComponent {
       let isDbVersionChanged = true;
       console.log('db -> dbVersion: ', dbVersion);
       if (dbVersion) {
-          // if (dbVersion == DB_CONFIG.dbVersion) {
-          //     isDbVersionChanged = false;
-          // }
+        if (dbVersion === DB_CONFIG.dbVersion) {
+            isDbVersionChanged = false;
+        }
       }
       if (isDbVersionChanged === true) {
-        // AppService.saveDbVersion(DB_CONFIG.dbVersion).then((result) => {
-        //   //this.DBInit(isDbVersionChanged);
-        // });
+        AppService.saveDbVersion(DB_CONFIG.dbVersion).then((result) => {
+          this.DBInit(isDbVersionChanged, 'SAVE_DB_VERSION').then(res => {
+            this.setState({isAppLoaded: true});
+          }).catch(err => {
+            this.setState({isAppLoaded: true});
+          });
+        });
       } else {
-        //this.DBInit(isDbVersionChanged);
+        this.DBInit(isDbVersionChanged).then(res => {
+          this.setState({isAppLoaded: true});
+        }).catch(err => {
+          this.setState({isAppLoaded: true});
+        });
       }
     }).catch(error => {
       console.log('db -> dbVersion error:: ', error);
-      this.DBInit(true);
+      this.DBInit(true, 'SAVE_DB_VERSION').then(res => {
+        this.setState({isAppLoaded: true});
+      }).catch(err => {
+        this.setState({isAppLoaded: true});
+      });
     });
 
     // device never go to sleep mode
@@ -56,37 +79,54 @@ export default class Application extends PureComponent {
    * Database Initialization
    * @param {*} isDbVersionChanged - is Db Version Changed
    */
-  async DBInit(isDbVersionChanged) {
+  DBInit(isDbVersionChanged, saveDBVersion) {
     console.log('db -> isDbVersionChanged ', isDbVersionChanged);
-    await DB.init(isDbVersionChanged).then((res) => {
-      console.log('db -> DB.init( success ', res);
-      
-      /* appService.device_info_save().then((res) => {
-
-        // Check screen
-        appService.getTnCInfo((err, isTnCAccepted) => {
-          if (err == null) {
-            setupService.isSetupEmpty().then((result) => {
-              if (result) {
-                this.setState({ setupOrScheduleRoute: 'SetupStackRoute', checkedApp: true, isTnCAccepted: isTnCAccepted });
-              } else {
-                this.setState({ setupOrScheduleRoute: 'ScheduleListingkRoute', checkedApp: true, isTnCAccepted: isTnCAccepted });
-              }
+    return new Promise((resolve, reject) => {
+      try {
+        DB.init(isDbVersionChanged).then((res) => {
+          console.log('db -> DB.init( success ', res);
+    
+          if (saveDBVersion === 'SAVE_DB_VERSION') {
+            AppService.saveDbVersion(DB_CONFIG.dbVersion).then((result) => {
+              resolve(true);
+            }).catch(err => {
+              reject(err);
             });
           } else {
-            this.setState({
-              checkedApp: true, isTnCAccepted: false
-            });
+            resolve(true);
           }
+    
+          /* appService.device_info_save().then((res) => {
+    
+            // Check screen
+            appService.getTnCInfo((err, isTnCAccepted) => {
+              if (err == null) {
+                setupService.isSetupEmpty().then((result) => {
+                  if (result) {
+                    this.setState({ setupOrScheduleRoute: 'SetupStackRoute', checkedApp: true, isTnCAccepted: isTnCAccepted });
+                  } else {
+                    this.setState({ setupOrScheduleRoute: 'ScheduleListingkRoute', checkedApp: true, isTnCAccepted: isTnCAccepted });
+                  }
+                });
+              } else {
+                this.setState({
+                  checkedApp: true, isTnCAccepted: false
+                });
+              }
+            });
+            // End: Check screen
+    
+          }).catch((err) => {
+          });
+          */
+    
+        }).catch((err) => {
+          console.log('db -> DB.init( error ', err);
+          reject(err);
         });
-        // End: Check screen
-
-      }).catch((err) => {
-      });
-      */
-
-    }).catch((err) => {
-      console.log('db -> DB.init( error ', err);
+      } catch(error) {
+        reject(error);
+      }
     });
 
   }
@@ -95,10 +135,13 @@ export default class Application extends PureComponent {
     const Layout = createRootNavigator(this.props.initialUser.user);
     return (
       // <Layout />
+      this.state.isAppLoaded ? 
       <View style={styles.container}>
         <RtcStatusBar backgroundColor={BG_WHITE_OPACITY} barStyle="dark-content" />
         <Layout />
       </View>
+      :
+      null
     );
   }
 }

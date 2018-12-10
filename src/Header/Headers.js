@@ -30,8 +30,50 @@ export class MenuTitle extends Component {
  */
 export class AddCallHeader extends Component {
   render() {
-    const { navigate } = this.props.navigation;
+    const { goBack, navigate } = this.props.navigation;
     console.log('AddCallHeader this.props: ', this.props);
+    return (
+      <View style={css.addCallHeader.container}>
+        <View style={css.addCallHeader.block}>
+          <TouchableHighlight
+            onPress={() => goBack(null)}
+            underlayColor={css.colors.button_underlay_color}
+            style={css.addCallHeader.touchable}
+          >
+            <View style={css.addCallHeader.touchableView}>
+              <Icon name='clear' color={css.colors.header_icon_color} size={25} />
+              <Text style={css.addCallHeader.text} numberOfLines={1}>
+                Discard
+              </Text>
+            </View>
+          </TouchableHighlight>
+        </View>
+        <View style={css.addCallHeader.block}>
+          <TouchableHighlight
+            onPress={() => this.props.handleOnCallSavePress()}
+            underlayColor={css.colors.button_underlay_color}
+            style={css.addCallHeader.touchable}
+          >
+            <View style={css.addCallHeader.touchableView}>
+              <Icon name='done' color={css.colors.header_icon_color} size={25} />
+              <Text style={css.addCallHeader.text} numberOfLines={1}>
+                Done
+              </Text>
+            </View>
+          </TouchableHighlight>
+        </View>
+      </View>
+    )
+  }
+}
+
+/**
+ * Call List Menu
+ */
+export class CallListHeader extends Component {
+  render() {
+    const { navigate } = this.props.navigation;
+    console.log('CallListHeader this.props: ', this.props);
     return (
       <View style={css.addCallHeader.container}>
         <View style={css.addCallHeader.block}>

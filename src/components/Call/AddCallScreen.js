@@ -118,18 +118,24 @@ export default class AddCallScreen extends ValidationComponent {
   onCallSaveValid(varIsFormValid) {
     if (varIsFormValid && !this.state.phoneNumber_error) {
       let saveObj = {
-        contactName: this.state.contactName,
-        phoneNumber: this.state.phoneNumber,
-        date: this.state.date,
-        color: this.state.color,
+        contact_name: this.state.contactName,
+        phone_number: this.state.phoneNumber,
+        schedule_date: moment(this.state.date).format("YYYY-MM-DD HH:mm:ss"),
+        color_type_id: this.state.color,
         note: this.state.note,
-        recurring: this.props.addCall.recurring
+        recurring_type_id: this.props.addCall.recurring.on,
+        recurring_end_date_type_id: this.props.addCall.recurring.endDateType,
+        recurring_end_date: moment(this.props.addCall.recurring.endDate).format("YYYY-MM-DD")
       };
       console.log('Validation success -->> saveObj: ', saveObj);
-      CallService.saveCall().then((res) => {
-        console.log("res: ", res);
+      CallService.saveCall(saveObj).then((res) => {
+        console.log("onCallSaveValid res: ", res);
+        if (res.success === true) {
+          this.props.onCallSaveSuccess();
+          this.props.navigation.navigate('CallListRoute');
+        }
       }).catch((err) => {
-        console.log("Error: ", err);
+        console.log("onCallSaveValid Error: ", err);
       })
     }
   }

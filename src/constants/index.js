@@ -26,10 +26,17 @@ export const appConsts = {
 
   drawerVersion: "1",
 
+  // Start: Reducer
   // Add Call -> Select Rcurring Type Screen
   rdRecurringTypeSelectReducer: 'RD_RECURRING_TYPE_SELECT_REDUCER',
   rdRecurringEndDateTypeSelectReducer: 'RD_RECURRING_END_DATE_TYPE_SELECT_REDUCER',
   txtRecurringDateSetReducer: 'TXT_RECURRING_DATE_SET_REDUCER',
+
+  // On Call Save
+  onCallSaveSuccessReducer: 'ON_CALL_SAVE_SUCCESS',
+  // End: Reducer
+
+
 
   //addCall: 'ADD_CALL',
   callColorOptions: [
@@ -150,6 +157,10 @@ export const ERROR_CODES = {
     get: 6.2,
     multiSave: 6.3,
     multiGet: 6.4
+  },
+  DB_SERVICE: {
+    save: 11.1,
+    //get: 11.2
   }
 };
 

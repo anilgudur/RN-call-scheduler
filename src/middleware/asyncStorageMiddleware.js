@@ -5,10 +5,13 @@ export const asyncStorageMiddleware = store => next => action => {
   const returnValue = next(action);
 
   const {
-    // CALL
+    // Add Call -> Select Rcurring Type Screen
     rdRecurringTypeSelectReducer,
     rdRecurringEndDateTypeSelectReducer,
     txtRecurringDateSetReducer,
+
+    // On Call Save
+    onCallSaveSuccessReducer,
 
     // TODO
     addTodo,
@@ -20,7 +23,7 @@ export const asyncStorageMiddleware = store => next => action => {
     clearUser,
     refreshToken
    } = appConsts;
-  const actions = [ rdRecurringTypeSelectReducer, rdRecurringEndDateTypeSelectReducer, txtRecurringDateSetReducer,     addTodo, doneTodo,      authWithSAML, authSuccess, clearUser, refreshToken ];
+  const actions = [ rdRecurringTypeSelectReducer, rdRecurringEndDateTypeSelectReducer, txtRecurringDateSetReducer, onCallSaveSuccessReducer,     addTodo, doneTodo,      authWithSAML, authSuccess, clearUser, refreshToken ];
 
   if (actions.includes(action.type)) {
     console.log("action.type$$: ", action.type);
@@ -31,6 +34,7 @@ export const asyncStorageMiddleware = store => next => action => {
       case rdRecurringTypeSelectReducer:
       case rdRecurringEndDateTypeSelectReducer:
       case txtRecurringDateSetReducer:
+      case onCallSaveSuccessReducer:
         saveIn = 'call';
         break;
       case addTodo:

@@ -1,4 +1,5 @@
 import { StackNavigator, SwitchNavigator } from 'react-navigation';
+import CallListContainer from '../containers/Call/CallListContainer';
 import AddCallContainer from '../containers/Call/AddCallContainer';
 import RecurringContainer from '../containers/Call/RecurringContainer';
 
@@ -16,6 +17,10 @@ import AddTaskContainer from '../containers/Task/AddTaskContainer';
 import * as css from "../Styles/Styles";
 
 export const CallNavigation = {
+  callListScreen: {
+    id: 'CallListContainer',
+    component: CallListContainer
+  },
   addCallScreen: {
     id: 'AddCallContainer',
     component: AddCallContainer
@@ -115,6 +120,9 @@ export const AuthStack = StackNavigator({
 });
 
 export const AppStack = StackNavigator({
+  CallListRoute: {
+    screen: CallNavigation.callListScreen.component,
+  },
   AddCallRoute: {
     screen: CallNavigation.addCallScreen.component,
   },
@@ -136,7 +144,7 @@ export const AppStack = StackNavigator({
   }
 },
 {
-  initialRouteName: 'AddCallRoute',
+  initialRouteName: 'CallListRoute',
   navigationOptions: () => ({
     ...css.header
   }),

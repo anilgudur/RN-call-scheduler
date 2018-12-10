@@ -56,13 +56,14 @@ export default class CallColorsRow extends Component {
   render() {
     const item = this.props.item;
     const keyColor = Object.keys(item)[0];
+    const valColor = Object.values(item)[0];
     let varColor = callColors[keyColor];
     //console.log('this.props.addCall.color ==> ', this.props.addCall.color);
     //console.log('keyColor ::> ', keyColor);
 
     return (
-      <Icon name={this.props.color == keyColor ? 'check-circle' : 'fiber-manual-record'} color={varColor} size={45}
-      onPress={() => {this.onColorSelect(keyColor);}}
+      <Icon name={this.props.color == valColor ? 'check-circle' : 'fiber-manual-record'} color={varColor} size={45}
+      onPress={() => {this.onColorSelect(valColor);}}
       />
     )
   }

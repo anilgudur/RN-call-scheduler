@@ -10,6 +10,9 @@ const {
   rdRecurringEndDateTypeSelectReducer,
   txtRecurringDateSetReducer,
 
+  // On Call Save
+  onCallSaveSuccessReducer,
+
   //addCall,
 
   addTodo,
@@ -65,6 +68,14 @@ export const addCallActions = {
     };
   },
 
+  onCallSaveSuccess() {
+    return (dispatch) => {
+      console.log("onCallSaveSuccess: ");
+      dispatch({
+        type: onCallSaveSuccessReducer
+      });
+    };
+  },
 
 
 

@@ -13,7 +13,7 @@ class DBService {
    * @memberof DBService
    * insertData
    */
-  insertData = (idata) => {
+  insertData(idata) {
 
     return new Promise((resolve, reject) => {
       let colname = [];
@@ -52,7 +52,7 @@ class DBService {
             reject(error);
           });
         } else {
-          updatequery = 'update ' + idata.tbname + " set " + updatedata.join(',') + ' where ' + condc.join(' AND ') + ';';
+          updatequery = 'UPDATE ' + idata.tbname + " SET " + updatedata.join(',') + ' WHERE ' + condc.join(' AND ') + ';';
           DB.query(updatequery).then((result) => {
             if (!result.rowsAffected) {
               DB.query(insertquery).then((res) => {
@@ -70,6 +70,68 @@ class DBService {
       }
     });
 
+  }
+
+  /*
+   * Get data list from table
+   */
+  getDataList = (data, order, group) => {
+    var datalist = [];
+    var cond = [];
+    var notCond = [];
+    var columns = [];
+
+    if (data.cond !== undefined) {
+        data.cond.forEach((c) => {
+            if (isNaN(c.data)) {
+                cond.push(c.name + "='" + c.data + "'");
+            } else {
+                cond.push(c.name + "=" + c.data);
+            }
+        });
+    }
+    // Added != condition
+    if (data.notCond !== undefined) {
+        data.notCond.forEach((c) => {
+            if (isNaN(c.data)) {
+                notCond.push(c.name + "!='" + c.data + "'");
+            } else {
+                notCond.push(c.name + "!=" + c.data);
+            }
+        });
+    }
+    data.columns.forEach((c) => {
+        columns.push(c);
+    })
+    var query;
+
+    if (cond.join(' AND ') != "") {
+        query = "SELECT " + columns.join(',') + " FROM " + data.tbname + " WHERE " + cond.join(' AND ');
+        // != 'not equal to' condition
+        if (notCond.join(' AND ') != "") {
+            query = query + " AND " + notCond.join(' AND ');
+        }
+    } else {
+        query = "SELECT " + columns.join(',') + " FROM " + data.tbname
+        // != 'not equal to' condition
+        if (notCond.join(' AND ') != "") {
+            query = query + " WHERE " + notCond.join(' AND ');
+        }
+    }
+
+    if (order != '' && order != undefined) {
+        query += " ORDER BY " + order;
+    }
+
+    if (group != '' && group != undefined) {
+        query += " GROUP BY " + group;
+    }
+
+    return DB.query(query).then((result) => {
+        return DB.fetchAll(result);
+    }).catch((err) => {
+        //console.log("err getData(): ", err);
+    });
   }
 
 }
