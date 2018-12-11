@@ -31,6 +31,7 @@ export const appConsts = {
   rdRecurringTypeSelectReducer: 'RD_RECURRING_TYPE_SELECT_REDUCER',
   rdRecurringEndDateTypeSelectReducer: 'RD_RECURRING_END_DATE_TYPE_SELECT_REDUCER',
   txtRecurringDateSetReducer: 'TXT_RECURRING_DATE_SET_REDUCER',
+  weeklyDaysSelectReducer: 'WEEKLY_DAYS_SELECT_REDUCER',
 
   // On Call Save
   onCallSaveSuccessReducer: 'ON_CALL_SAVE_SUCCESS',
@@ -67,6 +68,15 @@ export const appConsts = {
     mauve: '#E6C9A8',
     silver: '#E8EAED'
   },
+  weeklyDaysOptions: [
+    {monday: 1},
+    {tuesday: 2},
+    {wednesday: 3},
+    {thursday: 4},
+    {friday: 5},
+    {saturday: 6},
+    {sunday: 0}
+  ],
   rdOptionRecurring: {
     doNotRepeat: 0,
     daily: 1,

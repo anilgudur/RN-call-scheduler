@@ -9,6 +9,7 @@ export const asyncStorageMiddleware = store => next => action => {
     rdRecurringTypeSelectReducer,
     rdRecurringEndDateTypeSelectReducer,
     txtRecurringDateSetReducer,
+    weeklyDaysSelectReducer,
 
     // On Call Save
     onCallSaveSuccessReducer,
@@ -23,7 +24,7 @@ export const asyncStorageMiddleware = store => next => action => {
     clearUser,
     refreshToken
    } = appConsts;
-  const actions = [ rdRecurringTypeSelectReducer, rdRecurringEndDateTypeSelectReducer, txtRecurringDateSetReducer, onCallSaveSuccessReducer,     addTodo, doneTodo,      authWithSAML, authSuccess, clearUser, refreshToken ];
+  const actions = [ rdRecurringTypeSelectReducer, rdRecurringEndDateTypeSelectReducer, txtRecurringDateSetReducer, weeklyDaysSelectReducer, onCallSaveSuccessReducer,     addTodo, doneTodo,      authWithSAML, authSuccess, clearUser, refreshToken ];
 
   if (actions.includes(action.type)) {
     console.log("action.type$$: ", action.type);
@@ -34,6 +35,7 @@ export const asyncStorageMiddleware = store => next => action => {
       case rdRecurringTypeSelectReducer:
       case rdRecurringEndDateTypeSelectReducer:
       case txtRecurringDateSetReducer:
+      case weeklyDaysSelectReducer:
       case onCallSaveSuccessReducer:
         saveIn = 'call';
         break;

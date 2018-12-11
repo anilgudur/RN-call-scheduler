@@ -1,15 +1,15 @@
 import React, {Component } from 'react';
-import { View, Text, TextInput, DatePickerAndroid, TimePickerAndroid, TouchableHighlight } from "react-native";
+import { View, Text, TextInput, DatePickerAndroid, TimePickerAndroid, TouchableHighlight, FlatList } from "react-native";
 import PropTypes from 'prop-types';
 import { AddCallHeader } from "../../Header/Headers";
 import { Icon } from 'react-native-elements';
 import { global as gStyle, addCallScreen as styles, colors as stylesColors, values as styleValues } from '../../Styles/Styles';
 import moment from 'moment';
+import WeeklyDaysRow from './WeeklyDaysRow';
 import { appConsts } from '../../constants';
 const {
-  rdOptionRecurring, rdOptionRecurringEndDate
+  rdOptionRecurring, rdOptionRecurringEndDate, weeklyDaysOptions
 } = appConsts;
-
 
 export default class RecurringScreen extends Component {
 
@@ -36,15 +36,18 @@ export default class RecurringScreen extends Component {
     super(props);
     console.log('this.props RecurringScreen =>> ', this.props);
 
-    this.state = {
-      date: new Date(),
+    let todaysDate = new Date();
 
-      isFocusedDate: false,
+    this.state = {
+      date: moment(todaysDate).add(1, 'days').format("YYYY-MM-DD HH:mm:ss"),
+
+      isFocusedDate: false
     }
 
     this.setRecurringType = this.setRecurringType.bind(this);
     this.rdRecurringEndDateSelect = this.rdRecurringEndDateSelect.bind(this);
     this.openDate = this.openDate.bind(this);
+    this.onWeeklyDaySelect = this.onWeeklyDaySelect.bind(this);
   }
 
   setRecurringType(type) {
@@ -77,6 +80,33 @@ export default class RecurringScreen extends Component {
       console.warn('Cannot open date picker', message);
     }
   }
+
+  onWeeklyDaySelect(day) {
+    let weeklyDays = this.props.addCall.recurring.weeklyDays || [];
+    let key = weeklyDays.indexOf(day);
+    if (key === -1) {
+      weeklyDays.push(day);
+    } else {
+      weeklyDays.splice(key, 1);
+    }
+    console.log('weeklyDays:: ', weeklyDays);
+    this.props.weeklyDaysSelectAction(weeklyDays);
+    // this.setState({
+    //   //weeklyDays: weeklyDays,
+    //   extraData_weeklyDays: !this.state.extraData_weeklyDays
+    // });
+  }
+
+  _keyExtractor_weeklyDaysRow = (item, index) => index.toString();
+  _renderItem_weeklyDaysRow = ({ item, index }) => (
+    <WeeklyDaysRow
+      id={index}
+      index={index}
+      item={item}
+      weeklyDays={this.props.addCall.recurring.weeklyDays}
+      onWeeklyDaySelect={this.onWeeklyDaySelect}
+    />
+  );
 
   render() {
     //const item = this.props.item;
@@ -123,6 +153,19 @@ export default class RecurringScreen extends Component {
             </View>
           </TouchableHighlight>
         </View>
+
+        {
+          this.props.addCall.recurring.on === rdOptionRecurring.weekly && 
+          <View style={[styles.row]}>
+            <FlatList
+              data={weeklyDaysOptions}
+              extraData={this.props.addCall.recurring.extraData_weeklyDays}
+              keyExtractor={this._keyExtractor_weeklyDaysRow}
+              renderItem={this._renderItem_weeklyDaysRow}
+              horizontal={true}
+            />
+          </View>
+        }
 
         <View style={gStyle.radioRow}>
           <TouchableHighlight

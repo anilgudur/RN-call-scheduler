@@ -9,6 +9,7 @@ const {
   rdRecurringTypeSelectReducer,
   rdRecurringEndDateTypeSelectReducer,
   txtRecurringDateSetReducer,
+  weeklyDaysSelectReducer,
 
   // On Call Save
   onCallSaveSuccessReducer,
@@ -64,6 +65,17 @@ export const addCallActions = {
       dispatch({
         type: txtRecurringDateSetReducer,
         recurringDate: new Date(year, month, day),
+      });
+    };
+  },
+
+  weeklyDaysSelectAction(weeklyDays) {
+    console.log(weeklyDays);
+    return (dispatch) => {
+      console.log("weeklyDaysSelectAction pressed: ", weeklyDays);
+      dispatch({
+        type: weeklyDaysSelectReducer,
+        weeklyDays: weeklyDays
       });
     };
   },

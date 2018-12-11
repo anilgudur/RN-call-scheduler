@@ -47,11 +47,13 @@ class CallService {
             'note',
             'recurring_type_id',
             'recurring_end_date_type_id',
-            'recurring_end_date'
+            'recurring_end_date',
+            'weekly'
         ];
-        querydata.cond = [{
-            name: 'is_call_completed', data: 0
-        }];
+        querydata.cond = [
+          {name: 'is_call_completed', data: 0},
+          {name: 'is_call_completed', data: 0}
+        ];
         DBService.getDataList(querydata, 'schedule_date').then((result) => {
           console.log('result:: ', result);
           resolve('result:: ', result);

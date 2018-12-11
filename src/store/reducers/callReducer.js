@@ -1,10 +1,12 @@
 import { appConsts } from '../../constants';
+import moment from 'moment';
 
 const {
   // Add Call -> Select Rcurring Type Screen
   rdRecurringTypeSelectReducer,
   rdRecurringEndDateTypeSelectReducer,
   txtRecurringDateSetReducer,
+  weeklyDaysSelectReducer,
 
   // On Call Save
   onCallSaveSuccessReducer,
@@ -14,12 +16,16 @@ const {
   rdOptionRecurringEndDate
 } = appConsts;
 
+let todaysDate = new Date();
+
 const defaultStateModel = {
   addCall: {
     recurring: {
       on: rdOptionRecurring.doNotRepeat,
       endDateType: rdOptionRecurringEndDate.forever,
-      endDate: new Date(),
+      endDate: moment(todaysDate).add(1, 'days').format("YYYY-MM-DD"),
+      weeklyDays: [todaysDate.getDay()],
+      extraData_weeklyDays: false
     }
   }
 };
@@ -71,13 +77,28 @@ export const callReducer = (state = defaultStateModel, action) => {
         });
         break;
 
-      case onCallSaveSuccessReducer:
+      case weeklyDaysSelectReducer:
+        const recurringObj4 = Object.assign({}, state.addCall.recurring, {
+          weeklyDays: action.weeklyDays,
+          extraData_weeklyDays: !state.addCall.recurring.extraData_weeklyDays
+        });
+        //console.log('recurringObj4: ', recurringObj4);
         const addCallObj4 = Object.assign({}, state.addCall, {
-          recurring: defaultStateModel.addCall.recurring
+          recurring: recurringObj4
         });
         console.log('addCallObj4: ', addCallObj4);
         return Object.assign({}, state, {
           addCall: addCallObj4
+        });
+        break;
+
+      case onCallSaveSuccessReducer:
+        const addCallObj5 = Object.assign({}, state.addCall, {
+          recurring: defaultStateModel.addCall.recurring
+        });
+        console.log('addCallObj5: ', addCallObj5);
+        return Object.assign({}, state, {
+          addCall: addCallObj5
         });
         break;
 

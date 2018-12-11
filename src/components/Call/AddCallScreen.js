@@ -27,15 +27,17 @@ export default class AddCallScreen extends ValidationComponent {
     super(props);
     console.log('this.props AddCallScreen =>> ', this.props);
 
+    let todaysDate = new Date();
+
     this.state = {
       contactName: '',
       phoneNumber: '',
-      date: new Date(),
+      date: moment(todaysDate).add(1, 'hours').format("YYYY-MM-DD HH:mm:ss"),
       // recurring: {
       //   on: 'DO_NOT_REPEAT',
       //   endDate: null,
       // },
-      color: 'white',
+      color: 0,
       extraData_callColors: false,
       note: '',
 
@@ -125,7 +127,8 @@ export default class AddCallScreen extends ValidationComponent {
         note: this.state.note,
         recurring_type_id: this.props.addCall.recurring.on,
         recurring_end_date_type_id: this.props.addCall.recurring.endDateType,
-        recurring_end_date: moment(this.props.addCall.recurring.endDate).format("YYYY-MM-DD")
+        recurring_end_date: moment(this.props.addCall.recurring.endDate).format("YYYY-MM-DD"),
+        weekly: this.props.addCall.recurring.weeklyDays
       };
       console.log('Validation success -->> saveObj: ', saveObj);
       CallService.saveCall(saveObj).then((res) => {
