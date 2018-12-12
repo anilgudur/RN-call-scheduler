@@ -45,7 +45,7 @@ export default class Application extends PureComponent {
       }
       if (isDbVersionChanged === true) {
         AppService.saveDbVersion(DB_CONFIG.dbVersion).then((result) => {
-          this.DBInit(isDbVersionChanged, 'SAVE_DB_VERSION').then(res => {
+          this.DBInit(isDbVersionChanged).then(res => {
             this.setState({isAppLoaded: true});
           }).catch(err => {
             this.setState({isAppLoaded: true});
@@ -60,7 +60,7 @@ export default class Application extends PureComponent {
       }
     }).catch(error => {
       console.log('db -> dbVersion error:: ', error);
-      this.DBInit(true, 'SAVE_DB_VERSION').then(res => {
+      this.DBInit(true).then(res => {
         this.setState({isAppLoaded: true});
       }).catch(err => {
         this.setState({isAppLoaded: true});
@@ -79,14 +79,14 @@ export default class Application extends PureComponent {
    * Database Initialization
    * @param {*} isDbVersionChanged - is Db Version Changed
    */
-  DBInit(isDbVersionChanged, saveDBVersion) {
+  DBInit(isDbVersionChanged) {
     console.log('db -> isDbVersionChanged ', isDbVersionChanged);
     return new Promise((resolve, reject) => {
       try {
         DB.init(isDbVersionChanged).then((res) => {
           console.log('db -> DB.init( success ', res);
     
-          if (saveDBVersion === 'SAVE_DB_VERSION') {
+          if (isDbVersionChanged === true) {
             AppService.saveDbVersion(DB_CONFIG.dbVersion).then((result) => {
               resolve(true);
             }).catch(err => {
@@ -95,9 +95,9 @@ export default class Application extends PureComponent {
           } else {
             resolve(true);
           }
-    
+
           /* appService.device_info_save().then((res) => {
-    
+
             // Check screen
             appService.getTnCInfo((err, isTnCAccepted) => {
               if (err == null) {
@@ -115,11 +115,11 @@ export default class Application extends PureComponent {
               }
             });
             // End: Check screen
-    
+
           }).catch((err) => {
           });
           */
-    
+
         }).catch((err) => {
           console.log('db -> DB.init( error ', err);
           reject(err);

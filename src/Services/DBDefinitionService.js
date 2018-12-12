@@ -1,8 +1,7 @@
 'use strict';
 //import { CONFIG } from "../../Config/Environment/EnvironmentConfig";
-import {
-  DB_CONFIG
-} from '../Config/DBConfig';
+import { DB_CONFIG } from '../Config/DBConfig';
+import { TABLES } from '../constants/index';
 import SQLite from 'react-native-sqlite-storage';
 SQLite.DEBUG(true);
 SQLite.enablePromise(true);
@@ -57,7 +56,7 @@ class DBDefinitionService {
   populateDatabase(db) {
     return new Promise((resolve, reject) => {
       console.log("db -> Database integrity check");
-      db.executeSql('SELECT 1 FROM tbl_call_added LIMIT 1').then(() => {
+      db.executeSql('SELECT 1 FROM '+ TABLES.TBL_CALL_ADDED +' LIMIT 1').then(() => {
         console.log("db -> Database is ready ... executing query ...");
         resolve(true);
         // db.transaction(this.queryEmployees).then(() => {
@@ -150,6 +149,8 @@ class DBDefinitionService {
           });
         }
 
+      }).catch(err => {
+        reject(err);
       });
 
     });

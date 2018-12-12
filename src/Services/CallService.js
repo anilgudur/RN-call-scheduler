@@ -57,6 +57,9 @@ class CallService {
         DBService.getDataList(querydata, 'schedule_date').then((result) => {
           console.log('result:: ', result);
           resolve('result:: ', result);
+        }).catch(err => {
+          console.log('=====>>>>> err:: ', err);
+          reject(err);
         });
       } catch (err) {
         reject(false);

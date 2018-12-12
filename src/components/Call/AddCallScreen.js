@@ -32,7 +32,8 @@ export default class AddCallScreen extends ValidationComponent {
     this.state = {
       contactName: '',
       phoneNumber: '',
-      date: moment(todaysDate).add(1, 'hours').format("YYYY-MM-DD HH:mm:ss"),
+      //date: moment(todaysDate).add(1, 'hours').format("YYYY-MM-DD HH:mm:ss"),
+      date: new Date(),
       // recurring: {
       //   on: 'DO_NOT_REPEAT',
       //   endDate: null,
@@ -151,7 +152,7 @@ export default class AddCallScreen extends ValidationComponent {
     if (text != "") {
       this.setState({ phoneNumber: text }, () => {
 
-        const regExPhoneNumber = /^[0-9 \-\(\)]+$/;
+        const regExPhoneNumber = /^[0-9 \+\-\(\)]+$/;
         if (regExPhoneNumber.test(text)) {
           this.setState({ phoneNumber: text }, () => {
             this.validatePhoneNumber();

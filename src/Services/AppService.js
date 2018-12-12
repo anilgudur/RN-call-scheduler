@@ -8,22 +8,22 @@ import StorageService from "./StorageService";
  */
 class AppService {
 
-    /**
-     * Get Db Version
-     */
-    getDbVersion() {
-      return new Promise((resolve, reject) => {
-        let keyName = STORAGE_KEYS.DB_VERSION;
-        StorageService.get(keyName).then((dbVersion) => {
-          if (dbVersion !== null) {
-            resolve(dbVersion);
-          } else {
-            reject({errorMessage:"Key not found."});
-          }
-        }).catch((error) => {
-          reject(error);
-        });
+  /**
+   * Get Db Version
+   */
+  getDbVersion() {
+    return new Promise((resolve, reject) => {
+      let keyName = STORAGE_KEYS.DB_VERSION;
+      StorageService.get(keyName).then((dbVersion) => {
+        if (dbVersion !== null) {
+          resolve(dbVersion);
+        } else {
+          reject({errorMessage:"Key not found."});
+        }
+      }).catch((error) => {
+        reject(error);
       });
+    });
   }
 
   /**
