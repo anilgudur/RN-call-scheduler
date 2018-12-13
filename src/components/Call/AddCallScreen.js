@@ -32,8 +32,8 @@ export default class AddCallScreen extends ValidationComponent {
     this.state = {
       contactName: '',
       phoneNumber: '',
-      //date: moment(todaysDate).add(1, 'hours').format("YYYY-MM-DD HH:mm:ss"),
-      date: new Date(),
+      date: moment(todaysDate).add(1, 'hours').toDate(),
+      //date: new Date(),
       // recurring: {
       //   on: 'DO_NOT_REPEAT',
       //   endDate: null,
@@ -127,15 +127,15 @@ export default class AddCallScreen extends ValidationComponent {
         color_type_id: this.state.color,
         note: this.state.note,
         recurring_type_id: this.props.addCall.recurring.on,
-        recurring_end_date_type_id: this.props.addCall.recurring.endDateType,
-        recurring_end_date: moment(this.props.addCall.recurring.endDate).format("YYYY-MM-DD"),
-        weekly: this.props.addCall.recurring.weeklyDays
+        recurring_end_date_type_id: this.props.addCall.recurring.on !== rdOptionRecurring.doNotRepeat ? this.props.addCall.recurring.endDateType : 0,
+        recurring_end_date: this.props.addCall.recurring.on !== rdOptionRecurring.doNotRepeat && this.props.addCall.recurring.endDateType === rdOptionRecurringEndDate.endDate ? moment(this.props.addCall.recurring.endDate).format("YYYY-MM-DD") : "",
+        weekly: this.props.addCall.recurring.on === rdOptionRecurring.weekly ? this.props.addCall.recurring.weeklyDays : ""
       };
       console.log('Validation success -->> saveObj: ', saveObj);
       CallService.saveCall(saveObj).then((res) => {
         console.log("onCallSaveValid res: ", res);
         if (res.success === true) {
-          this.props.onCallSaveSuccess();
+          this.props.onCallSaveSuccessAction();
           this.props.navigation.navigate('CallListRoute');
         }
       }).catch((err) => {

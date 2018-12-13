@@ -78,14 +78,14 @@ export const appConsts = {
     {sunday: 0}
   ],
   rdOptionRecurring: {
-    doNotRepeat: 0,
-    daily: 1,
-    weekly: 2,
-    monthly: 3
+    doNotRepeat: 1,
+    daily: 2,
+    weekly: 3,
+    monthly: 4
   },
   rdOptionRecurringEndDate: {
-    forever: 0,
-    endDate: 1
+    forever: 1,
+    endDate: 2
   },
 
 

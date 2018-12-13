@@ -58,13 +58,12 @@ export const addCallActions = {
     };
   },
 
-  recurringDateSelect(year, month, day) {
-    console.log(year, month, day);
+  recurringDateSelect(date) {
     return (dispatch) => {
-      console.log("recurringDateSelect pressed: ", year, month, day);
+      console.log("recurringDateSelect pressed: ", date);
       dispatch({
         type: txtRecurringDateSetReducer,
-        recurringDate: new Date(year, month, day),
+        recurringDate: new Date(date),
       });
     };
   },
@@ -80,9 +79,9 @@ export const addCallActions = {
     };
   },
 
-  onCallSaveSuccess() {
+  onCallSaveSuccessAction() {
     return (dispatch) => {
-      console.log("onCallSaveSuccess: ");
+      console.log("onCallSaveSuccessAction: ");
       dispatch({
         type: onCallSaveSuccessReducer
       });

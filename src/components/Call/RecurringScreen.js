@@ -36,11 +36,7 @@ export default class RecurringScreen extends Component {
     super(props);
     console.log('this.props RecurringScreen =>> ', this.props);
 
-    let todaysDate = new Date();
-
     this.state = {
-      date: moment(todaysDate).add(1, 'days').format("YYYY-MM-DD HH:mm:ss"),
-
       isFocusedDate: false
     }
 
@@ -68,13 +64,12 @@ export default class RecurringScreen extends Component {
         // May 25 2020. Month 0 is January.
         minDate: new Date(),
         mode: 'spinner',
-        date: new Date(this.props.addCall.recurring.endDate)
+        date: moment(this.props.addCall.recurring.endDate).toDate()
       });
       if (action !== DatePickerAndroid.dismissedAction) {
         // Selected year, month (0-11), day
-        console.log(year, month, day);
-        this.setState({date:new Date(year, month, day)});
-        this.props.recurringDateSelect(year, month, day);
+        console.log('*****', year, month, day);
+        this.props.recurringDateSelect(new Date(Date.UTC(year, month, day, 18, 0, 0)));
       }
     } catch ({code, message}) {
       console.warn('Cannot open date picker', message);
