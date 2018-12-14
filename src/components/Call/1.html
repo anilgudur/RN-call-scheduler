@@ -1,132 +1,354 @@
 <html>
+  <head>
+    <script src="moment.min.js"></script>
+    <script>
+      var arr = [
+        {
+          color_type_id: 7,
+          contact_name: "Anil",
+          is_call_completed: 0,
+          note: "Note - 11",
+          phone_number: "+91 11 1111 1111",
+          recurring_end_date: "",
+          recurring_end_date_type_id: 1,
+          recurring_type_id: 4,
+          schedule_date: "2018-12-14 19:39:00",
+          weekly: "",
+          _id: 8
+        },
+        {
+          color_type_id: 0,
+          contact_name: "Anil",
+          note: "Note - 1",
+          phone_number: "+91 11 1111 1111",
+          recurring_end_date: "",
+          recurring_end_date_type_id: 0,
+          recurring_type_id: 1,
+          schedule_date: "2019-01-01 22:01:00",
+          weekly: "",
+          _id: 1
+        },
+        {
+          color_type_id: 1,
+          contact_name: "Anil",
+          is_call_completed: 0,
+          note: "Note - 2",
+          phone_number: "(222) 222-2222",
+          recurring_end_date: "",
+          recurring_end_date_type_id: 1,
+          recurring_type_id: 2,
+          schedule_date: "2019-01-02 22:03:00",
+          weekly: "",
+          _id: 2
+        },
 
-<head>
-  <script>
-    var arr = [{
-        color_type_id: 0,
-        contact_name: "Anil",
-        note: "Note - 1",
-        phone_number: "+91 11 1111 1111",
-        recurring_end_date: "",
-        recurring_end_date_type_id: 0,
-        recurring_type_id: 1,
-        schedule_date: "2019-01-01 22:01:00",
-        weekly: "",
-        _id: 1
-      },
-      {
-        color_type_id: 1,
-        contact_name: "Anil",
-        is_call_completed: 0,
-        note: "Note - 2",
-        phone_number: "(222) 222-2222",
-        recurring_end_date: "",
-        recurring_end_date_type_id: 1,
-        recurring_type_id: 2,
-        schedule_date: "2019-01-02 22:03:00",
-        weekly: "",
-        _id: 2
-      },
-      {
-        color_type_id: 0,
-        contact_name: "Anil",
-        is_call_completed: 0,
-        note: "Note - 3",
-        phone_number: "+91 11 1111 1111",
-        recurring_end_date: "",
-        recurring_end_date_type_id: 1,
-        recurring_type_id: 3,
-        schedule_date: "2019-01-03 22:04:00",
-        weekly: "4,1",
-        _id: 3
-      },
-      {
-        color_type_id: 3,
-        contact_name: "Anil",
-        is_call_completed: 0,
-        note: "Note - 4",
-        phone_number: "(222) 222-2222",
-        recurring_end_date: "",
-        recurring_end_date_type_id: 1,
-        recurring_type_id: 3,
-        schedule_date: "2019-01-04 22:05:00",
-        weekly: "4,6",
-        _id: 4
-      },
-      {
-        color_type_id: 4,
-        contact_name: "Anil",
-        is_call_completed: 0,
-        note: "Note - 5",
-        phone_number: "+91 11 1111 1111",
-        recurring_end_date: "2019-02-05",
-        recurring_end_date_type_id: 2,
-        recurring_type_id: 3,
-        schedule_date: "2019-01-05 22:20:00",
-        weekly: "4,6",
-        _id: 5
-      },
-      {
-        color_type_id: 4,
-        contact_name: "Anil",
-        is_call_completed: 0,
-        note: "Note - 5",
-        phone_number: "+91 11 1111 1111",
-        recurring_end_date: "2019-02-05",
-        recurring_end_date_type_id: 2,
-        recurring_type_id: 3,
-        schedule_date: "2019-01-05 22:23:00",
-        weekly: "4,6",
-        _id: 6
-      },
-      {
-        color_type_id: 6,
-        contact_name: "Anil",
-        is_call_completed: 0,
-        note: "Note - 6",
-        phone_number: "+91 11 1111 1111",
-        recurring_end_date: "",
-        recurring_end_date_type_id: 0,
-        recurring_type_id: 1,
-        schedule_date: "2019-01-07 22:26:00",
-        weekly: "",
-        _id: 7
-      }
-    ];
-  </script>
-</head>
+        {
+          color_type_id: 0,
+          contact_name: "Anil",
+          is_call_completed: 0,
+          note: "Note - 3",
+          phone_number: "+91 11 1111 1111",
+          recurring_end_date: "",
+          recurring_end_date_type_id: 1,
+          recurring_type_id: 3,
+          schedule_date: "2019-01-03 22:04:00",
+          weekly: "4,1",
+          _id: 3
+        },
+        {
+          color_type_id: 3,
+          contact_name: "Anil",
+          is_call_completed: 0,
+          note: "Note - 4",
+          phone_number: "(222) 222-2222",
+          recurring_end_date: "",
+          recurring_end_date_type_id: 1,
+          recurring_type_id: 3,
+          schedule_date: "2019-01-04 22:05:00",
+          weekly: "4,6",
+          _id: 4
+        },
+        {
+          color_type_id: 4,
+          contact_name: "Anil",
+          is_call_completed: 0,
+          note: "Note - 5",
+          phone_number: "+91 11 1111 1111",
+          recurring_end_date: "2019-02-05",
+          recurring_end_date_type_id: 2,
+          recurring_type_id: 3,
+          schedule_date: "2019-01-05 22:20:00",
+          weekly: "4,6",
+          _id: 5
+        },
+        {
+          color_type_id: 4,
+          contact_name: "Anil",
+          is_call_completed: 0,
+          note: "Note - 5",
+          phone_number: "+91 11 1111 1111",
+          recurring_end_date: "2019-02-05",
+          recurring_end_date_type_id: 2,
+          recurring_type_id: 3,
+          schedule_date: "2019-01-05 22:23:00",
+          weekly: "4,6",
+          _id: 6
+        },
+        {
+          color_type_id: 6,
+          contact_name: "Anil",
+          is_call_completed: 0,
+          note: "Note - 6",
+          phone_number: "+91 11 1111 1111",
+          recurring_end_date: "",
+          recurring_end_date_type_id: 0,
+          recurring_type_id: 1,
+          schedule_date: "2019-01-07 22:26:00",
+          weekly: "",
+          _id: 7
+        }
+      ];
+    </script>
+  </head>
 
-<body>
-  <script>
-    var upcomingArr = [];
-    var oldArr = [];
-    var recurringArr = [];
-    var completedArr = [];
-    var todaysDate = new Date();
-    todaysDate = new Date(todaysDate.getFullYear(), todaysDate.getMonth(), todaysDate.getDate(), 0, 0, 0);
-    console.log('todaysDate:: ', todaysDate);
-    arr.forEach(row => {
-      var d2 = new Date(row.schedule_date);
-      console.log('row', row);
-      if (d2.getTime() >= todaysDate.getTime()) {
-        upcomingArr.push(row);
-      } else {
-        oldArr.push(row);
-      }
+  <body>
+    <script>
+      var upcomingArr = [];
+      var oldArr = [];
+      var recurringArr = [];
+      var completedArr = [];
+      var todaysDate = new Date();
+      todaysDate = new Date(
+        todaysDate.getFullYear(),
+        todaysDate.getMonth(),
+        todaysDate.getDate(),
+        0,
+        0,
+        0
+      );
+      //console.log('todaysDate:: ', todaysDate);
+      arr.forEach(row => {
+        var scheduleDate = new Date(row.schedule_date);
+        var newRow = "";
+        var genDate = "";
+        var recurringEndDate = "";
 
-      if (row.recurring_type_id === 3) {
-        recurringArr.push(row);
-      }
-      if (row.is_call_completed === 1) {
-        completedArr.push(row);
-      }
+        if (scheduleDate.getTime() >= todaysDate.getTime()) {
+          console.log("row", row);
 
-    });
-    console.log('upcomingArr', upcomingArr);
-    console.log('oldArr', oldArr);
-    console.log('recurringArr', recurringArr);
-    console.log('completedArr', completedArr);
-  </script>
-</body>
+          // Do Not Repeat
+          if (row.recurring_type_id === 1) {
+            // Upcoming
+            newRow = Object.assign({}, row, {
+              generatedScheduleDate: scheduleDate
+            });
+            upcomingArr.push(newRow);
+          }
 
+          // Daily
+          if (row.recurring_type_id === 2) {
+            if (row.recurring_end_date_type_id === 2) {
+              recurringEndDate = new Date(row.recurring_end_date);
+              if (recurringEndDate.getTime() >= todaysDate.getTime()) {
+                genDate = new Date(
+                  todaysDate.getFullYear(),
+                  todaysDate.getMonth(),
+                  todaysDate.getDate(),
+                  todaysDate.getHours(),
+                  todaysDate.getMinutes(),
+                  0
+                );
+                newRow = Object.assign({}, row, {
+                  generatedScheduleDate: genDate
+                });
+                upcomingArr.push(newRow);
+              } else {
+                // Old
+                newRow = Object.assign({}, row, {
+                  generatedScheduleDate: scheduleDate
+                });
+                oldArr.push(newRow);
+              }
+            } else {
+              // Forever
+              genDate = new Date(
+                todaysDate.getFullYear(),
+                todaysDate.getMonth(),
+                todaysDate.getDate(),
+                todaysDate.getHours(),
+                todaysDate.getMinutes(),
+                0
+              );
+              newRow = Object.assign({}, row, {
+                generatedScheduleDate: genDate
+              });
+              upcomingArr.push(newRow);
+            }
+          }
+
+          // Weekly - Recurring
+          if (row.recurring_type_id === 3) {
+            isPushWeekly = false;
+            if (row.recurring_end_date_type_id === 2) {
+              recurringEndDate = new Date(row.recurring_end_date);
+              if (recurringEndDate.getTime() >= todaysDate.getTime()) {
+                isPushWeekly = true;
+              } else {
+                // Old
+                newRow = Object.assign({}, row, {
+                  generatedScheduleDate: scheduleDate
+                });
+                oldArr.push(newRow);
+              }
+            } else {
+              // Forever
+              isPushWeekly = true;
+            }
+
+            if (isPushWeekly === true) {
+              var startWeekDate =
+                scheduleDate.getTime() > todaysDate.getTime()
+                  ? scheduleDate
+                  : todaysDate;
+              var endWeekDate = moment(startWeekDate)
+                .add(6, "days")
+                .toDate();
+              endWeekDate = new Date(
+                endWeekDate.getFullYear(),
+                endWeekDate.getMonth(),
+                endWeekDate.getDate(),
+                23,
+                59,
+                59
+              );
+              //console.log('endWeekDate =====>>>>> ', endWeekDate);
+              var weekDaysArr = row.weekly.split(",");
+              weekDaysArr = weekDaysArr.map(Number);
+              //console.log('weekDaysArr ==>> ', weekDaysArr);
+              // Loop through week days
+              for (
+                var d = 0, startPointer = startWeekDate.getDay();
+                d < 7;
+                d++, startPointer++
+              ) {
+                if (startPointer > 6) {
+                  startPointer = 0;
+                }
+                //console.log('d', d);
+                //console.log('startPointer', startPointer);
+                if (weekDaysArr.includes(startPointer)) {
+                  genDate = moment(startWeekDate)
+                    .add(d, "days")
+                    .toDate();
+                  genDate = new Date(
+                    genDate.getFullYear(),
+                    genDate.getMonth(),
+                    genDate.getDate(),
+                    scheduleDate.getHours(),
+                    scheduleDate.getMinutes(),
+                    0
+                  );
+                  newRow = Object.assign({}, row, {
+                    generatedScheduleDate: genDate
+                  });
+                  upcomingArr.push(newRow);
+                  //console.log('newRow|| ', newRow);
+                }
+              }
+            }
+          }
+
+          // Monthly
+          if (row.recurring_type_id === 4) {
+            var isPushMonthly = false;
+            if (row.recurring_end_date_type_id === 2) {
+              recurringEndDate = new Date(row.recurring_end_date);
+              if (recurringEndDate.getTime() >= todaysDate.getTime()) {
+                isPushMonthly = true;
+              } else {
+                // Old
+                newRow = Object.assign({}, row, {
+                  generatedScheduleDate: scheduleDate
+                });
+                oldArr.push(newRow);
+              }
+            } else {
+              // Forever
+              isPushMonthly = true;
+            }
+          }
+          if (isPushMonthly === true) {
+            var monthlyDate =
+              scheduleDate.getTime() > todaysDate.getTime()
+                ? scheduleDate
+                : moment(scheduleDate)
+                    .add(1, "months")
+                    .toDate();
+            genDate = new Date(
+              monthlyDate.getFullYear(),
+              monthlyDate.getMonth(),
+              monthlyDate.getDate(),
+              scheduleDate.getHours(),
+              scheduleDate.getMinutes(),
+              0
+            );
+            newRow = Object.assign({}, row, {
+              generatedScheduleDate: genDate
+            });
+            upcomingArr.push(newRow);
+          }
+        } else {
+          // Old
+          newRow = Object.assign({}, row, {
+            generatedScheduleDate: scheduleDate
+          });
+          oldArr.push(newRow);
+        }
+
+        // Recurring
+        if (row.recurring_type_id !== 1) {
+          newRow = Object.assign({}, row, {
+            generatedScheduleDate: scheduleDate
+          });
+          recurringArr.push(newRow);
+        }
+
+        // Completed
+        if (row.is_call_completed === 1) {
+          newRow = Object.assign({}, row, {
+            generatedScheduleDate: scheduleDate
+          });
+          completedArr.push(newRow);
+        }
+      });
+
+      // Sort
+      upcomingArr.sort(function(a, b) {
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return (
+          new Date(a.generatedScheduleDate) - new Date(b.generatedScheduleDate)
+        );
+      });
+      oldArr.sort(function(a, b) {
+        return (
+          new Date(b.generatedScheduleDate) - new Date(a.generatedScheduleDate)
+        );
+      });
+      recurringArr.sort(function(a, b) {
+        return (
+          new Date(b.generatedScheduleDate) - new Date(a.generatedScheduleDate)
+        );
+      });
+      completedArr.sort(function(a, b) {
+        return (
+          new Date(b.generatedScheduleDate) - new Date(a.generatedScheduleDate)
+        );
+      });
+      console.log("upcomingArr", upcomingArr);
+      console.log("oldArr", oldArr);
+      console.log("recurringArr", recurringArr);
+      console.log("completedArr", completedArr);
+    </script>
+  </body>
 </html>

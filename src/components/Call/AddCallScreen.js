@@ -235,7 +235,7 @@ export default class AddCallScreen extends ValidationComponent {
       });
       if (action !== TimePickerAndroid.dismissedAction) {
         // Selected hour (0-23), minute (0-59)
-        this.setState({ date: new Date(this.state.date.getFullYear(), this.state.date.getMonth(), this.state.date.getDate(), hour, minute) });
+        this.setState({ date: new Date(this.state.date.getFullYear(), this.state.date.getMonth(), this.state.date.getDate(), hour, minute, 0) });
       }
     } catch ({ code, message }) {
       console.warn('Cannot open time picker', message);
