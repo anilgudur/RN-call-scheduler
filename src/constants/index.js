@@ -87,6 +87,7 @@ export const appConsts = {
     forever: 1,
     endDate: 2
   },
+  callStatus_COMPLETED: 2,
 
 
   addTodo: 'ADD_TODO',

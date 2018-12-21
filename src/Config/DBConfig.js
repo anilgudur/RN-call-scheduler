@@ -6,7 +6,7 @@ import { TABLES } from '../constants/index';
  */
 export const DB_CONFIG = {
     dbName: 'CallScheduler.db',
-    dbVersion: '0.1',
+    dbVersion: '0.2',
     dbDisplayname: 'SQLite Test Database',
     dbSize: 200000,
     tables: [
@@ -23,7 +23,7 @@ export const DB_CONFIG = {
             {name: 'recurring_end_date_type_id', type: 'TINYINT(3)'},
             {name: 'recurring_end_date', type: 'DATE'},
             {name: 'weekly', type: 'VARCHAR(14)'},
-            {name: 'is_call_completed', type: 'TINYINT(3) DEFAULT 0'}
+            {name: 'call_status', type: 'TINYINT(3) DEFAULT 1'}
         ]
       },
     ]

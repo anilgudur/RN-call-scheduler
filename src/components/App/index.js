@@ -85,7 +85,7 @@ export default class Application extends PureComponent {
       try {
         DB.init(isDbVersionChanged).then((res) => {
           console.log('db -> DB.init( success ', res);
-    
+
           if (isDbVersionChanged === true) {
             AppService.saveDbVersion(DB_CONFIG.dbVersion).then((result) => {
               resolve(true);

@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { fontSizeValues } from './PixelRatioValues';
+const tintColor = '#2f95dc';
 
 export const colors = {
   'background_header': '#444444', // #F2F6F6 #00AEE7 #0099E1
@@ -15,6 +16,17 @@ export const colors = {
   'icon_color_disabled': '#BABABD',
   'text_color_disabled': '#BABABD',
   'text_color_enabled': '#4B4B4D',
+
+  tintColor,
+  tabIconDefault: '#ccc',
+  tabIconSelected: tintColor,
+  tabBar: '#fefefe',
+  errorBackground: 'red',
+  errorText: '#fff',
+  warningBackground: '#EAEB5E',
+  warningText: '#666804',
+  noticeBackground: tintColor,
+  noticeText: '#fff',
 
 
   //OLD
@@ -197,6 +209,99 @@ export const addCallScreen = StyleSheet.create({
   }
 
 });
+
+export const tabs = {
+  icons: {
+    color: '#fff', 
+    top: (Platform.OS === 'ios') ? 2 : -4
+  },
+}
+
+export const call_listing_screen = StyleSheet.create({
+
+  date_text: {
+      fontFamily: values.font_medium, textAlign: 'center',
+  },
+  date_text_date_active: {
+      fontSize: 17, color: "#FFFFFF",
+  },
+  date_text_date_inactive: {
+      fontSize: 15, color: "#6BB0B0",
+  },
+  date_text_day_active: {
+      fontSize: 13, color: "#FFFFFF",
+  },
+  date_text_day_inactive: {
+      fontSize: 11, color: "#6BB0B0",
+  },
+  task: {
+      fontFamily: values.font_medium, fontSize: 14, color: '#444444'
+  },
+
+  date_list: {
+      height: 60, flexDirection: 'row'
+  },
+  date_block: {
+      flex: 1, height: 50, backgroundColor: '#008B8B', alignItems: 'center', paddingTop: 5
+  },
+  date_text_inactive: {
+      fontFamily: 'roboto-medium', color: "#6BB0B0", fontSize: 12, textAlign: 'center'
+  },
+  date_text_active: {
+      fontFamily: 'roboto-medium', color: "#FFFFFF", fontSize: 14, textAlign: 'center'
+  },
+  schedule_container: {
+      flex: 1, flexDirection: 'row', paddingTop: 10,
+  },
+  schedule_block: {
+      flex: 1, flexDirection: 'column', justifyContent: 'space-between'
+  },
+  task_block: {
+      flex: 1, flexDirection: 'row', marginLeft: 10, marginRight: 10, marginBottom: 10, borderWidth: 1, borderColor: '#E7E5E2', borderRadius: 3,
+      shadowColor: 'rgba(0, 0, 0, 0.75)',
+      shadowOpacity: 0.75,
+      shadowRadius: 3,
+      shadowOffset: {
+          width: 1,
+          height: 2,
+      },
+      elevation: 2,
+  },
+  task_process: {
+      width: 90, height: 108, backgroundColor: '#E7E5E2', paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5, justifyContent: 'center', alignItems: 'center'
+  },
+  task_detail: {
+      flex: 1, height: 108, backgroundColor: '#FFFFFF', paddingTop: 15, paddingRight: 15, paddingLeft: 15,
+  },
+  process_icon: {
+      // paddingBottom:5
+  },
+  process_time: {  textAlign: 'center',flexDirection: 'column',alignSelf:'center',justifyContent:'center',alignItems:'center', fontFamily: values.font_medium, fontSize: 13, color: '#444444', paddingTop: 5,
+  },
+  process_status: {
+      fontFamily: values.font_regular, fontSize: 13, color: '#888785'
+  },
+  name: {
+      fontSize: 17, fontFamily: values.font_medium, color: '#018B8B'
+  },
+  work: {
+      fontSize: 13, fontFamily: values.font_medium, color: '#787878'
+  },
+  phone_block: {
+      flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', paddingTop: 3,
+  },
+  phone_no: {
+      flex: 1, fontSize: 12, fontFamily: values.font_regular, color: '#82817F', textAlign: 'left'
+  },
+  address: {
+      flex: 1, fontSize: 12, fontFamily: values.font_regular, color: '#82817F'
+  }
+
+});
+
+
+
+
 
 
 
