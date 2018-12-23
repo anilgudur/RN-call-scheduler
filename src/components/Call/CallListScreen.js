@@ -1,26 +1,41 @@
-import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, FlatList, Platform } from "react-native";
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import {
+  View,
+  Text,
+  TouchableHighlight,
+  FlatList,
+  Platform
+} from "react-native";
+import PropTypes from "prop-types";
 import { MenuIcon, MenuTitle, CallListHeader } from "../../Header/Headers";
-import { Icon, FormValidationMessage } from 'react-native-elements';
-import { addCallScreen as styles, colors as stylesColors, global as gStyle, tabs as tabsStyle, colors as colorsStyle } from '../../Styles/Styles';
-import moment from 'moment';
-import { I18n } from 'react-redux-i18n';
-import CallDateRow from './CallDateRow';
-import { appConsts } from '../../constants';
+import { Icon, FormValidationMessage } from "react-native-elements";
+import {
+  addCallScreen as styles,
+  colors as stylesColors,
+  global as gStyle,
+  tabs as tabsStyle,
+  colors as colorsStyle
+} from "../../Styles/Styles";
+import moment from "moment";
+import { I18n } from "react-redux-i18n";
+import CallDateRow from "./CallDateRow";
+import { appConsts } from "../../constants";
 const {
-  callColorOptions, rdOptionRecurring, rdOptionRecurringEndDate
+  callColorOptions,
+  rdOptionRecurring,
+  rdOptionRecurringEndDate
 } = appConsts;
-import { TabNavigator } from 'react-navigation';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { TabNavigator } from "react-navigation";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 import CallService from "../../Services/CallService";
 
-import UpcomingCallsTabScreen from './CallListType/UpcomingCallsTabScreen';
-import OldCallsTabScreen from './CallListType/OldCallsTabScreen';
-import RecurringCallsTabScreen from './CallListType/RecurringCallsTabScreen';
-import CompletedCallsTabScreen from './CallListType/CompletedCallsTabScreen';
+import UpcomingCallsTabScreen from "./CallListType/UpcomingCallsTabScreen";
+import OldCallsTabScreen from "./CallListType/OldCallsTabScreen";
+import RecurringCallsTabScreen from "./CallListType/RecurringCallsTabScreen";
+import CompletedCallsTabScreen from "./CallListType/CompletedCallsTabScreen";
 
+const stringifyObject = require("stringify-object");
 
 const CallsTab = TabNavigator(
   {
@@ -29,13 +44,13 @@ const CallsTab = TabNavigator(
     },
     OldCallsTabRoute: {
       screen: OldCallsTabScreen
-    },
-    RecurringCallsTabRoute: {
-      screen: RecurringCallsTabScreen
-    },
-    CompletedCallsTabRoute: {
-      screen: CompletedCallsTabScreen
     }
+    // RecurringCallsTabRoute: {
+    //   screen: RecurringCallsTabScreen
+    // },
+    // CompletedCallsTabRoute: {
+    //   screen: CompletedCallsTabScreen
+    // }
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -68,46 +83,45 @@ const CallsTab = TabNavigator(
       //   );
       // },
     }),
-    tabBarPosition: 'top',
+    tabBarPosition: "top",
     animationEnabled: true,
     swipeEnabled: true,
     tabBarOptions: {
-      activeTintColor: 'white',
-      inactiveTintColor: '#DDDDDD',
+      activeTintColor: "white",
+      inactiveTintColor: "#DDDDDD",
       labelStyle: {
         fontSize: 12,
         margin: 0,
-        padding: 0,
-    },
-    },
+        padding: 0
+      }
+    }
   }
 );
 
-export default class AddCallScreen extends Component {
-
+export default class CallListScreen extends Component {
   static propTypes = {
     //screenProps: PropTypes.shape({
-    onAddPress: PropTypes.func.isRequired,
+    onAddPress: PropTypes.func.isRequired
     //}).isRequired
   };
 
   constructor(props) {
     super(props);
-    console.log('this.props AddCallScreen =>> ', this.props);
+    //console.log("this.props CallListScreen =>> ", this.props);
 
     this.state = {
-      isLoading: true,
+      isLoaded: true,
 
-      contactName: '',
-      phoneNumber: '',
+      contactName: "",
+      phoneNumber: "",
       date: new Date(),
       // recurring: {
       //   on: 'DO_NOT_REPEAT',
       //   endDate: null,
       // },
-      color: 'white',
+      color: "white",
       extraData_callColors: false,
-      note: '',
+      note: "",
 
       isFocusedContactName: false,
       isFocusedPhoneNumber: false,
@@ -117,8 +131,9 @@ export default class AddCallScreen extends Component {
 
       phoneNumber_error: false,
 
-      phoneNumber_error_message: '',
+      phoneNumber_error_message: "",
 
+      sendProps: {}
 
       // sendProps: {
       //   upcomingArr: [
@@ -154,8 +169,7 @@ export default class AddCallScreen extends Component {
       //   recurringArr: [],
       //   completedArr: []
       // },
-
-    }
+    };
 
     // this.handleOnPhoneNumberChange = this.handleOnPhoneNumberChange.bind(this);
     // this.openDate = this.openDate.bind(this);
@@ -170,56 +184,58 @@ export default class AddCallScreen extends Component {
     // this.onCancelPress = this.onCancelPress.bind(this);
   }
 
-  static navigationOptions = ({ navigation, screenProps }) => //(
-  {
+  static navigationOptions = (
+    { navigation, screenProps } //(
+  ) => {
     const { navigate } = navigation;
     return {
-      headerLeft: <MenuIcon
-                      navigation={navigation}
-                      onPress={() => navigate('DrawerOpen')}
-                  />,
-      headerTitle: <MenuTitle
-                      navigation={navigation}
-                      titleName={"Call Planner"}
-                  />,
-      headerRight: <Icon name="more-vert" color='white' size={20} />
-    }
+      headerLeft: (
+        <MenuIcon
+          navigation={navigation}
+          onPress={() => navigate("DrawerOpen")}
+        />
+      ),
+      headerTitle: (
+        <MenuTitle navigation={navigation} titleName={"Call Planner"} />
+      ),
+      headerRight: <Icon name="more-vert" color="white" size={20} />
+    };
   };
 
   componentDidMount() {
-    CallService.getCallList().then((res) => {
-      console.log('----------res', res);
-      CallService.callListTypeFilter(res).then((filteredRes) => {
-        console.log('----------filteredRes', filteredRes);
-        this.setState({
-          sendProps: filteredRes,
-          isLoading: false
-        }, () => {
-          console.log('this.state.sendProps', this.state.sendProps);
-        });
-      }).catch(err => {
-        console.log('CallService.callListTypeFilter() Error:: ', err);
-        this.setState({isLoading: false});
-      });
-    }).catch(err => {
-      console.log('CallService.getCallList() Error:: ', err);
-      this.setState({isLoading: false});
-    });
+    // CallService.getCallList()
+    //   .then(res => {
+    //     //console.log("----------res", res);
+    //     CallService.callListTypeFilter(res)
+    //       .then(filteredRes => {
+    //         console.log("----------filteredRes", filteredRes);
+    //         this.setState({
+    //           sendProps: filteredRes,
+    //           isLoaded: true
+    //         });
+    //       })
+    //       .catch(err => {
+    //         console.log("CallService.callListTypeFilter() Error:: ", err);
+    //         this.setState({ isLoaded: true });
+    //       });
+    //   })
+    //   .catch(err => {
+    //     console.log("CallService.getCallList() Error:: ", err);
+    //     this.setState({ isLoaded: true });
+    //   });
   }
 
   render() {
-
-    if (this.state.isLoading === true) {
+    if (!this.state.isLoaded) {
       return null;
     }
 
     return (
       <View style={styles.container}>
         <CallsTab
-          screenProps={this.state.sendProps}
+        //screenProps={this.state.sendProps}
         />
       </View>
     );
   }
-
 }
