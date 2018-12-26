@@ -44,13 +44,13 @@ const CallsTab = TabNavigator(
     },
     OldCallsTabRoute: {
       screen: OldCallsTabScreen
+    },
+    RecurringCallsTabRoute: {
+      screen: RecurringCallsTabScreen
+    },
+    CompletedCallsTabRoute: {
+      screen: CompletedCallsTabScreen
     }
-    // RecurringCallsTabRoute: {
-    //   screen: RecurringCallsTabScreen
-    // },
-    // CompletedCallsTabRoute: {
-    //   screen: CompletedCallsTabScreen
-    // }
   },
   {
     navigationOptions: ({ navigation }) => ({

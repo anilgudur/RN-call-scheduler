@@ -68,8 +68,6 @@ export default class CallRow extends Component {
     });
     let color = Object.keys(result)[0];
 
-
-
     return (
       <View style={[listingStyles.task_block, {justifyContent:'center', alignItems:'center', height:70, }]}>
         <View style={{
@@ -92,7 +90,7 @@ export default class CallRow extends Component {
         </View>
         <View style={{
           flex:1,
-          flexDirection:'column', paddingRight:20,
+          flexDirection:'column', paddingRight:10,
         }}>
           <TouchableHighlight
             onPress={() => { console.log('pressed details'); }}
@@ -101,17 +99,17 @@ export default class CallRow extends Component {
           >
             <View>
               <View>
-                <Text style={{fontSize:14}} numberOfLines={1}>{item.contact_name || 'Default'} asdad asd asd asd asd asd asd asd asd</Text>
+                <Text style={{fontSize:14}} numberOfLines={1}>{item.contact_name || 'Default'}</Text>
               </View>
               <View>
-                <Text style={{fontSize:12}} numberOfLines={1}>{item.phone_number} asdad asd asd asd asd asd asd asd asd</Text>
+                <Text style={{fontSize:12}} numberOfLines={1}>{item.phone_number}</Text>
               </View>
               <View style={{flexDirection:'row', justifyContent: 'flex-start', alignItems: 'center'}}>
                 {
                   item.recurring_type_id !== 1 && 
                   <Icon name="autorenew" color='#666666' size={15} />
                 }
-                <Text style={{fontSize:10, paddingLeft:5}} numberOfLines={1}>{item.note} asdad asd asd asd asd asd asd asd asd</Text>
+                <Text style={[{fontSize:10}, item.recurring_type_id !== 1 ? {paddingLeft:5} : {}]} numberOfLines={1}>{item.note}</Text>
               </View>
             </View>
           </TouchableHighlight>

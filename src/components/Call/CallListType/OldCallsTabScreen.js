@@ -9,10 +9,6 @@ import CallService from "../../../Services/CallService";
 
 export default class OldCallsTabScreen extends Component {
   static propTypes = {
-    // screenProps: PropTypes.shape({
-    //   oldArr: PropTypes.array.isRequired,
-    //   oldDatesArr: PropTypes.array.isRequired
-    // }).isRequired
   };
 
   static navigationOptions = {
@@ -31,21 +27,30 @@ export default class OldCallsTabScreen extends Component {
 
     this.state = {
       isLoaded: false,
-      sendProps: {},
+      oldDatesArr: [],
+      oldArr: [],
       extraData_callColors: false
     };
-    console.log("this.props:: ", this.props);
   }
 
   componentDidMount() {
-    // if (
-    //   Array.isArray(this.props.screenProps.oldArr) &&
-    //   Array.isArray(this.props.screenProps.oldDatesArr)
-    // ) {
-    this.setState({
-      isLoaded: true
+    CallService.getCallList().then(res => {
+      CallService.callListTypeFilterAW(res, "OLD").then(filteredRes => {
+        this.setState({
+          oldArr: filteredRes.oldArr,
+          oldDatesArr: filteredRes.oldDatesArr,
+          isLoaded: true
+        });
+      })
+      .catch(err => {
+        console.log("CallService.callListTypeFilter() Error:: ", err);
+        this.setState({ isLoaded: true });
+      });
+    })
+    .catch(err => {
+      console.log("CallService.getCallList() Error:: ", err);
+      this.setState({ isLoaded: true });
     });
-    //}
   }
 
   _keyExtractor_callColorsRow = (item, index) => index.toString();
@@ -54,11 +59,7 @@ export default class OldCallsTabScreen extends Component {
       id={index}
       index={index}
       item={item}
-      //oldArr={this.props.screenProps.oldArr}
-      //dataArr={this.props.screenProps.oldArr}
-      dataArr={this.state.sendProps.oldArr}
-      //color={this.state.color}
-      //onColorSelect={this.onColorSelect}
+      dataArr={this.state.oldArr}
     />
   );
 
@@ -74,8 +75,7 @@ export default class OldCallsTabScreen extends Component {
         }}
       >
         <FlatList
-          //data={this.props.screenProps.oldDatesArr}
-          data={this.state.sendProps.oldDatesArr}
+          data={this.state.oldDatesArr}
           extraData={this.state.extraData_callColors}
           keyExtractor={this._keyExtractor_callColorsRow}
           renderItem={this._renderItem_callColorsRow}
@@ -83,4 +83,5 @@ export default class OldCallsTabScreen extends Component {
       </View>
     );
   }
+
 }

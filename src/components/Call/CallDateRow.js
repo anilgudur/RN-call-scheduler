@@ -27,7 +27,6 @@ export default class CallDateRow extends Component {
   constructor(props) {
     super(props);
 
-    //console.log("@@@@@this.props", this.props);
     this.state = {
       isLoaded: false,
       newDataArr: [],
@@ -37,29 +36,26 @@ export default class CallDateRow extends Component {
     };
   }
 
-  componentDidMount() {
-    // if (
-    //   this.props.item === undefined ||
-    //   this.props.item === "" ||
-    //   this.props.item === "Invalid date"
-    // ) {
-    // } else {
-    let newArr = this.props.dataArr.filter(
-      row =>
-        moment(new Date(row.generatedScheduleDate)).format("YYYY-MM-DD") ===
-        this.props.item
-    );
+  async componentDidMount() {
+    let newArr = await this.filterData(this.props.item, this.props.dataArr);
+
     this.setState({
       newDataArr: newArr,
-      // diffDays: moment([this.props.item]).diff(moment([]), "days"),
-      // generatedDateFormat: moment(this.props.item).format("DD-MM-YYYY"),
       diffDays: moment(new Date(this.props.item)).diff(moment([]), "days"),
-      generatedDateFormat: moment(new Date(this.props.item)).format(
-        "DD-MM-YYYY"
-      ),
+      generatedDateFormat: moment(this.props.item).format("DD-MM-YYYY"),
       isLoaded: true
     });
-    //}
+  }
+
+  filterData(date, arr) {
+    return new Promise(async (resolve, reject) => {
+      let newArr = await arr.filter(
+        row =>
+          moment(row.generatedScheduleDate).format("YYYY-MM-DD") ===
+          date
+      );
+      resolve(newArr);
+    });
   }
 
   _keyExtractor_callColorsRow = (item, index) => index.toString();
@@ -101,23 +97,21 @@ export default class CallDateRow extends Component {
             fontWeight: "bold"
           }}
         >
-          Date val:
+          {
+            this.state.diffDays === 0
+            ? "Today"
+            : this.state.diffDays === 1
+            ? "Tomorrow"
+            : this.state.generatedDateFormat
+          }
         </Text>
+        <FlatList
+          data={this.state.newDataArr}
+          extraData={this.state.extraData_callColors}
+          keyExtractor={this._keyExtractor_callColorsRow}
+          renderItem={this._renderItem_callColorsRow}
+        />
       </View>
     );
   }
 }
-
-// {this.props.item} ||
-// {this.state.diffDays === 0
-//   ? "Today"
-//   : this.state.diffDays === 1
-//   ? "Tomorrow"
-//   : this.state.generatedDateFormat}
-
-// <FlatList
-//           data={this.state.newDataArr}
-//           extraData={this.state.extraData_callColors}
-//           keyExtractor={this._keyExtractor_callColorsRow}
-//           renderItem={this._renderItem_callColorsRow}
-//         />
