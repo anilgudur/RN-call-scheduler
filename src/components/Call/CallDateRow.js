@@ -50,9 +50,7 @@ export default class CallDateRow extends Component {
   filterData(date, arr) {
     return new Promise(async (resolve, reject) => {
       let newArr = await arr.filter(
-        row =>
-          moment(row.generatedScheduleDate).format("YYYY-MM-DD") ===
-          date
+        row => moment(row.generatedScheduleDate).format("YYYY-MM-DD") === date
       );
       resolve(newArr);
     });
@@ -66,6 +64,9 @@ export default class CallDateRow extends Component {
       item={item}
       //color={this.state.color}
       //onColorSelect={this.onColorSelect}
+      screenProps={this.props.screenProps}
+      onMoveToCompletedPressed={this.props.onMoveToCompletedPressed}
+      onDeleteCallPressed={this.props.onDeleteCallPressed}
     />
   );
 
@@ -97,13 +98,11 @@ export default class CallDateRow extends Component {
             fontWeight: "bold"
           }}
         >
-          {
-            this.state.diffDays === 0
+          {this.state.diffDays === 0
             ? "Today"
             : this.state.diffDays === 1
             ? "Tomorrow"
-            : this.state.generatedDateFormat
-          }
+            : this.state.generatedDateFormat}
         </Text>
         <FlatList
           data={this.state.newDataArr}

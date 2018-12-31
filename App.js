@@ -6,13 +6,11 @@
  * @flow
  */
 
-import React, { PureComponent } from 'react';
-import Root from './src/Root';
+import React, { PureComponent } from "react";
+import Root from "./src/Root";
 
 export default class App extends PureComponent {
   render() {
-    return (
-      <Root />
-    );
+    return <Root />;
   }
 }

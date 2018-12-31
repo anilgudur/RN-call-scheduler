@@ -11,7 +11,7 @@ class CallService {
   saveCall(data) {
     console.log("In Call Service");
     return new Promise((resolve, reject) => {
-      // #SQLite
+      // Add - #SQLite
       let querydata = {};
       querydata.tbname = TABLES.TBL_CALL_ADDED;
       querydata.data = data;
@@ -26,6 +26,81 @@ class CallService {
         })
         .catch(err => {
           console.log("CallService saveCall Error: ", err);
+          reject(err);
+        });
+    });
+  }
+
+  updateCall(data, id) {
+    return new Promise((resolve, reject) => {
+      var querydata = {};
+      querydata.tbname = TABLES.TBL_CALL_ADDED;
+      querydata.cond = [
+        {
+          name: "_id",
+          data: id
+        }
+      ];
+      querydata.columns = data;
+      DBService.updateData(querydata)
+        .then(res => {
+          console.log("CallService updateCall: ", res);
+          resolve({
+            success: true,
+            saveType: "UPDATED"
+          });
+        })
+        .catch(err => {
+          console.log("CallService updateCall Error: ", err);
+          reject(err);
+        });
+    });
+  }
+
+  deleteCall(item) {
+    return new Promise((resolve, reject) => {
+      let query = `DELETE FROM ${TABLES.TBL_CALL_ADDED} WHERE _id=${item._id}`;
+      DBService.runQuery(query)
+        .then(res => {
+          console.log("CallService updateCall: ", res);
+          resolve({
+            success: true,
+            saveType: "DELETED"
+          });
+        })
+        .catch(err => {
+          console.log("CallService updateCall Error: ", err);
+          reject(err);
+        });
+    });
+  }
+
+  moveToCompleted(item) {
+    return new Promise((resolve, reject) => {
+      var querydata = {};
+      querydata.tbname = TABLES.TBL_CALL_ADDED;
+      querydata.cond = [
+        {
+          name: "_id",
+          data: item._id
+        }
+      ];
+      querydata.columns = [
+        {
+          name: "call_status",
+          data: appConsts.callStatus_COMPLETED
+        }
+      ];
+      DBService.updateData(querydata)
+        .then(res => {
+          console.log("CallService moveToCompleted: ", res);
+          resolve({
+            success: true,
+            saveType: "UPDATED"
+          });
+        })
+        .catch(err => {
+          console.log("CallService moveToCompleted Error: ", err);
           reject(err);
         });
     });
@@ -50,8 +125,8 @@ class CallService {
           "recurring_type_id",
           "recurring_end_date_type_id",
           "recurring_end_date",
-          "weekly"
-          //'is_call_completed'
+          "weekly",
+          "call_status"
         ];
         // querydata.cond = [
         //   {name: 'is_call_completed', data: 0}
@@ -83,33 +158,33 @@ class CallService {
         completedDatesArr = [];
       for (let i = 0; i < callArr.length; i++) {
         let rowData = await this.callListTypeFilterRow(callArr[i], i, type);
-        let res = '';
+        let res = "";
         switch (type) {
-          case 'UPCOMING':
+          case "UPCOMING":
             res = rowData.upcomingArr;
             break;
-          case 'OLD':
+          case "OLD":
             res = rowData.oldArr;
             break;
-          case 'RECURRING':
+          case "RECURRING":
             res = rowData.recurringArr;
             break;
-          case 'COMPLETED':
+          case "COMPLETED":
             res = rowData.completedArr;
             break;
         }
         if (res.length > 0) {
           switch (type) {
-            case 'UPCOMING':
+            case "UPCOMING":
               upcomingArr.push(...res);
               break;
-            case 'OLD':
+            case "OLD":
               oldArr.push(...res);
               break;
-            case 'RECURRING':
+            case "RECURRING":
               recurringArr.push(...res);
               break;
-            case 'COMPLETED':
+            case "COMPLETED":
               completedArr.push(...res);
               break;
           }
@@ -117,40 +192,48 @@ class CallService {
       }
 
       switch (type) {
-        case 'UPCOMING':
+        case "UPCOMING":
           if (upcomingArr.length > 0) {
             for (const row of upcomingArr) {
-              let date1 = await moment(row.generatedScheduleDate).format("YYYY-MM-DD");
+              let date1 = await moment(row.generatedScheduleDate).format(
+                "YYYY-MM-DD"
+              );
               if (upcomingDatesArr.includes(date1) === false) {
                 upcomingDatesArr.push(date1);
               }
             }
           }
           break;
-        case 'OLD':
+        case "OLD":
           if (oldArr.length > 0) {
             for (const row of oldArr) {
-              let date1 = await moment(row.generatedScheduleDate).format("YYYY-MM-DD");
+              let date1 = await moment(row.generatedScheduleDate).format(
+                "YYYY-MM-DD"
+              );
               if (oldDatesArr.includes(date1) === false) {
                 oldDatesArr.push(date1);
               }
             }
           }
           break;
-        case 'RECURRING':
+        case "RECURRING":
           if (recurringArr.length > 0) {
             for (const row of recurringArr) {
-              let date1 = await moment(row.generatedScheduleDate).format("YYYY-MM-DD");
+              let date1 = await moment(row.generatedScheduleDate).format(
+                "YYYY-MM-DD"
+              );
               if (recurringDatesArr.includes(date1) === false) {
                 recurringDatesArr.push(date1);
               }
             }
           }
           break;
-        case 'COMPLETED':
+        case "COMPLETED":
           if (completedArr.length > 0) {
             for (const row of completedArr) {
-              let date1 = await moment(row.generatedScheduleDate).format("YYYY-MM-DD");
+              let date1 = await moment(row.generatedScheduleDate).format(
+                "YYYY-MM-DD"
+              );
               if (completedDatesArr.includes(date1) === false) {
                 completedDatesArr.push(date1);
               }
@@ -161,25 +244,25 @@ class CallService {
 
       let returnObj = {};
       switch (type) {
-        case 'UPCOMING':
+        case "UPCOMING":
           returnObj = {
             upcomingArr,
             upcomingDatesArr
           };
           break;
-        case 'OLD':
+        case "OLD":
           returnObj = {
             oldArr,
             oldDatesArr
           };
           break;
-        case 'RECURRING':
+        case "RECURRING":
           returnObj = {
             recurringArr,
             recurringDatesArr
           };
           break;
-        case 'COMPLETED':
+        case "COMPLETED":
           returnObj = {
             completedArr,
             completedDatesArr
@@ -222,14 +305,17 @@ class CallService {
     //scheduleDate.getTime() >= todaysDate.getTime()
     let genDate = "";
     let recurringEndDate = "";
+    let scheduleDateToDate = moment(row.schedule_date).toDate();
 
     try {
       return new Promise(async (resolve, reject) => {
-        if (type === 'UPCOMING' || type === 'OLD') {
+        if (
+          (type === "UPCOMING" || type === "OLD") &&
+          row.call_status === appConsts.callStatus_ADDED
+        ) {
           if (moment(scheduleDate).isSameOrAfter(todaysDate)) {
-
             // Do Not Repeat
-            if (type === 'UPCOMING') {
+            if (type === "UPCOMING") {
               if (row.recurring_type_id === 1) {
                 let genDate = await this.generateDate(row, scheduleDate);
                 upcomingArr.push(genDate);
@@ -241,21 +327,27 @@ class CallService {
               if (row.recurring_end_date_type_id === 2) {
                 recurringEndDate = moment(row.recurring_end_date);
                 if (moment(recurringEndDate).isSameOrAfter(todaysDate)) {
-                  if (type === 'UPCOMING') {
-                    let genDate = await this.generateDate(row, todaysDateUptoMinute);
+                  if (type === "UPCOMING") {
+                    let genDate = await this.generateDate(
+                      row,
+                      todaysDateUptoMinute
+                    );
                     upcomingArr.push(genDate);
                   }
                 } else {
                   // Old
-                  if (type === 'OLD') {
+                  if (type === "OLD") {
                     let genDate = await this.generateDate(row, scheduleDate);
                     oldArr.push(genDate);
                   }
                 }
               } else {
                 // Forever
-                if (type === 'UPCOMING') {
-                  let genDate = await this.generateDate(row, todaysDateUptoMinute);
+                if (type === "UPCOMING") {
+                  let genDate = await this.generateDate(
+                    row,
+                    todaysDateUptoMinute
+                  );
                   upcomingArr.push(genDate);
                 }
               }
@@ -270,7 +362,7 @@ class CallService {
                   isPushWeekly = true;
                 } else {
                   // Old
-                  if (type === 'OLD') {
+                  if (type === "OLD") {
                     let genDate = await this.generateDate(row, scheduleDate);
                     oldArr.push(genDate);
                   }
@@ -280,11 +372,12 @@ class CallService {
                 isPushWeekly = true;
               }
 
-              if (type === 'UPCOMING' && isPushWeekly === true) {
-                let startWeekDate =
-                  moment(scheduleDate).isSameOrAfter(todaysDate) ?
-                  scheduleDate :
-                  todaysDate;
+              if (type === "UPCOMING" && isPushWeekly === true) {
+                let startWeekDate = moment(scheduleDate).isSameOrAfter(
+                  todaysDate
+                )
+                  ? scheduleDate
+                  : todaysDate;
                 let endWeekDate = moment(startWeekDate)
                   .add(6, "days")
                   .toDate();
@@ -300,7 +393,12 @@ class CallService {
                 weekDaysArr = weekDaysArr.map(Number);
                 // Loop through week days
                 for (
-                  let d = 0, startPointer = startWeekDate.getDay(); d < 7; d++, startPointer++
+                  let d = 0,
+                    startPointer = moment(startWeekDate)
+                      .toDate()
+                      .getDay();
+                  d < 7;
+                  d++, startPointer++
                 ) {
                   if (startPointer > 6) {
                     startPointer = 0;
@@ -315,8 +413,8 @@ class CallService {
                       genDate.getFullYear(),
                       genDate.getMonth(),
                       genDate.getDate(),
-                      scheduleDate.getHours(),
-                      scheduleDate.getMinutes(),
+                      scheduleDateToDate.getHours(),
+                      scheduleDateToDate.getMinutes(),
                       0
                     );
                     let genDate = await this.generateDate(row, genDate);
@@ -335,7 +433,7 @@ class CallService {
                   isPushMonthly = true;
                 } else {
                   // Old
-                  if (type === 'OLD') {
+                  if (type === "OLD") {
                     let genDate = await this.generateDate(row, scheduleDate);
                     oldArr.push(genDate);
                   }
@@ -346,28 +444,26 @@ class CallService {
               }
               console.log("|4|");
             }
-            if (type === 'UPCOMING' && isPushMonthly === true) {
-              let monthlyDate =
-                moment(scheduleDate).isAfter(todaysDate) ?
-                scheduleDate :
-                moment(scheduleDate)
-                .add(1, "months")
-                .toDate();
+            if (type === "UPCOMING" && isPushMonthly === true) {
+              let monthlyDate = moment(scheduleDate).isAfter(todaysDate)
+                ? scheduleDateToDate
+                : moment(scheduleDate)
+                    .add(1, "months")
+                    .toDate();
               genDate = new Date(
                 monthlyDate.getFullYear(),
                 monthlyDate.getMonth(),
                 monthlyDate.getDate(),
-                scheduleDate.getHours(),
-                scheduleDate.getMinutes(),
+                scheduleDateToDate.getHours(),
+                scheduleDateToDate.getMinutes(),
                 0
               );
               let genDate = await this.generateDate(row, genDate);
               upcomingArr.push(genDate);
             }
-
           } else {
             // Old
-            if (type === 'OLD') {
+            if (type === "OLD") {
               let genDate = await this.generateDate(row, scheduleDate);
               oldArr.push(genDate);
             }
@@ -389,22 +485,22 @@ class CallService {
 
         let returnObj = {};
         switch (type) {
-          case 'UPCOMING':
+          case "UPCOMING":
             returnObj = {
               upcomingArr
             };
             break;
-          case 'OLD':
+          case "OLD":
             returnObj = {
               oldArr
             };
             break;
-          case 'RECURRING':
+          case "RECURRING":
             returnObj = {
               recurringArr
             };
             break;
-          case 'COMPLETED':
+          case "COMPLETED":
             returnObj = {
               completedArr
             };
@@ -413,16 +509,13 @@ class CallService {
         resolve(returnObj);
         //resolve(upcomingArr);
       });
-
     } catch (error) {}
   }
 
   generateDate(row, date) {
     return new Promise((resolve, reject) => {
       let newRow = Object.assign({}, row, {
-        generatedScheduleDate: moment(date).format(
-          "YYYY-MM-DD HH:mm:ss"
-        )
+        generatedScheduleDate: moment(date).format("YYYY-MM-DD HH:mm:ss")
       });
       resolve(newRow);
     });
@@ -435,7 +528,6 @@ class CallService {
       }, ms);
     });
   }
-
 }
 
 module.exports = new CallService();

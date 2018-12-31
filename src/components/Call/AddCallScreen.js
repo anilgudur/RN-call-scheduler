@@ -1,38 +1,55 @@
-import React, { Component } from 'react';
-import { View, Text, TextInput, DatePickerAndroid, TimePickerAndroid, TouchableHighlight, FlatList } from "react-native";
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  DatePickerAndroid,
+  TimePickerAndroid,
+  TouchableHighlight,
+  FlatList,
+  PermissionsAndroid
+} from "react-native";
+import PropTypes from "prop-types";
 import { AddCallHeader } from "../../Header/Headers";
-import { Icon, FormValidationMessage } from 'react-native-elements';
-import { addCallScreen as styles, colors as stylesColors, global as gStyle } from '../../Styles/Styles';
-import moment from 'moment';
-import { I18n } from 'react-redux-i18n';
-import CallColorsRow from './CallColorsRow';
-import { appConsts } from '../../constants';
-import { selectContactPhone } from 'react-native-select-contact';
+import { Icon, FormValidationMessage } from "react-native-elements";
+import {
+  addCallScreen as styles,
+  colors as stylesColors,
+  global as gStyle
+} from "../../Styles/Styles";
+import moment from "moment";
+import { I18n } from "react-redux-i18n";
+import CallColorsRow from "./CallColorsRow";
+import { appConsts } from "../../constants";
+import { selectContactPhone } from "react-native-select-contact";
 const {
-  callColorOptions, rdOptionRecurring, rdOptionRecurringEndDate
+  callColorOptions,
+  rdOptionRecurring,
+  rdOptionRecurringEndDate
 } = appConsts;
 import ValidationComponent from "../../Validator/index";
 import CallService from "../../Services/CallService";
 
 export default class AddCallScreen extends ValidationComponent {
-
   static propTypes = {
     //screenProps: PropTypes.shape({
-    onAddPress: PropTypes.func.isRequired,
+    onAddPress: PropTypes.func.isRequired
     //}).isRequired
   };
 
   constructor(props) {
     super(props);
-    console.log('this.props AddCallScreen =>> ', this.props);
+    //console.log("this.props AddCallScreen =>> ", this.props);
 
     let todaysDate = new Date();
 
     this.state = {
-      contactName: '',
-      phoneNumber: '',
-      date: moment(todaysDate).add(1, 'hours').toDate(),
+      _id: 0,
+      contactName: "",
+      phoneNumber: "",
+      date: moment(todaysDate)
+        .add(1, "hours")
+        .toDate(),
       //date: new Date(),
       // recurring: {
       //   on: 'DO_NOT_REPEAT',
@@ -40,7 +57,9 @@ export default class AddCallScreen extends ValidationComponent {
       // },
       color: 0,
       extraData_callColors: false,
-      note: '',
+      note: "",
+
+      isReadContactsGranted: false,
 
       isFocusedContactName: false,
       isFocusedPhoneNumber: false,
@@ -50,8 +69,8 @@ export default class AddCallScreen extends ValidationComponent {
 
       phoneNumber_error: false,
 
-      phoneNumber_error_message: '',
-    }
+      phoneNumber_error_message: ""
+    };
 
     this.handleOnPhoneNumberChange = this.handleOnPhoneNumberChange.bind(this);
     this.openDate = this.openDate.bind(this);
@@ -66,81 +85,214 @@ export default class AddCallScreen extends ValidationComponent {
     this.onCancelPress = this.onCancelPress.bind(this);
   }
 
-  static navigationOptions = ({ navigation, screenProps }) => //(
-  {
+  static navigationOptions = (
+    { navigation, screenProps } //(
+  ) => {
     const { state, setParams, navigate } = navigation;
     const params = state.params || {};
 
     return {
       headerLeft: null,
-      headerTitle: <AddCallHeader
-        navigation={navigation}
-        handleOnCallSavePress={params.handleOnCallSavePress}
-        titleName={"Privacy Policy"}
-      />,
+      headerTitle: (
+        <AddCallHeader
+          navigation={navigation}
+          handleOnCallSavePress={params.handleOnCallSavePress}
+          titleName={"Privacy Policy"}
+        />
+      ),
       headerRight: null
-    }
+    };
   };
 
   componentDidMount() {
+    const item = this.props.navigation.state.params;
+    if (item !== undefined) {
+      this.setState({
+        _id: item._id,
+        contactName: item.contact_name,
+        phoneNumber: item.phone_number,
+        date: moment(item.schedule_date),
+        color: item.color_type_id,
+        extraData_callColors: false,
+        note: item.note,
+        extraData_callColors: !this.state.extraData_callColors
+      });
+    }
+
     this.props.navigation.setParams({
       handleOnCallSavePress: this.onCallSavePressed
     });
+    this.requestCameraPermission();
+  }
+
+  async requestCameraPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+        {
+          title: "Call Scheduler App Contacts Read Permission",
+          message:
+            "Call Scheduler App needs access to your contacts " +
+            "so you can select contacts."
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        this.setState({ isReadContactsGranted: true });
+        //console.log("You can use the contacts");
+      } else {
+        this.setState({ isReadContactsGranted: false });
+        //console.log("Camera permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
   }
 
   onCallSavePressed() {
-
     // Call ValidationComponent validate method
     this.validate({
       phoneNumber: { required: true }
     });
 
     // Phone Number
-    if (this.isFieldInError('phoneNumber')) {
-      let errorType = '', errorMessage = '';
-      let errorObj = this.getErrorMessage('phoneNumber');
+    if (this.isFieldInError("phoneNumber")) {
+      let errorType = "",
+        errorMessage = "";
+      let errorObj = this.getErrorMessage("phoneNumber");
       if (errorObj.messages.required !== undefined) {
-        errorType = 'required';
-        errorMessage = errorObj.messages.required.replace("{fieldName}", 'Phone number');
+        errorType = "required";
+        errorMessage = errorObj.messages.required.replace(
+          "{fieldName}",
+          "Phone number"
+        );
       }
       this.setState({
         phoneNumber_error: true,
         phoneNumber_error_message: errorMessage
       });
     } else {
-      this.setState({
-        phoneNumber_error: false,
-        phoneNumber_error_message: '',
-      }, () => {
-        this.onCallSaveValid(this.isFormValid());
-      });
+      this.setState(
+        {
+          phoneNumber_error: false,
+          phoneNumber_error_message: ""
+        },
+        () => {
+          this.onCallSaveValid(this.isFormValid());
+        }
+      );
     }
-
   }
 
   onCallSaveValid(varIsFormValid) {
     if (varIsFormValid && !this.state.phoneNumber_error) {
-      let saveObj = {
-        contact_name: this.state.contactName,
-        phone_number: this.state.phoneNumber,
-        schedule_date: moment(this.state.date).format("YYYY-MM-DD HH:mm:ss"),
-        color_type_id: this.state.color,
-        note: this.state.note,
-        recurring_type_id: this.props.addCall.recurring.on,
-        recurring_end_date_type_id: this.props.addCall.recurring.on !== rdOptionRecurring.doNotRepeat ? this.props.addCall.recurring.endDateType : 0,
-        recurring_end_date: this.props.addCall.recurring.on !== rdOptionRecurring.doNotRepeat && this.props.addCall.recurring.endDateType === rdOptionRecurringEndDate.endDate ? moment(this.props.addCall.recurring.endDate).format("YYYY-MM-DD") : "",
-        weekly: this.props.addCall.recurring.on === rdOptionRecurring.weekly ? this.props.addCall.recurring.weeklyDays : ""
-      };
-      console.log('Validation success -->> saveObj: ', saveObj);
-      CallService.saveCall(saveObj).then((res) => {
-        console.log("onCallSaveValid res: ", res);
-        if (res.success === true) {
-          this.props.onCallSaveSuccessAction();
-          this.props.navigation.navigate('CallListRoute');
-        }
-      }).catch((err) => {
-        console.log("onCallSaveValid Error: ", err);
-      })
+      if (this.state._id === 0) {
+        // ADD
+        let saveObj = {
+          contact_name: this.state.contactName,
+          phone_number: this.state.phoneNumber,
+          schedule_date: moment(this.state.date).format("YYYY-MM-DD HH:mm:ss"),
+          color_type_id: this.state.color,
+          note: this.state.note,
+          recurring_type_id: this.props.addCall.recurring.on,
+          recurring_end_date_type_id:
+            this.props.addCall.recurring.on !== rdOptionRecurring.doNotRepeat
+              ? this.props.addCall.recurring.endDateType
+              : 0,
+          recurring_end_date:
+            this.props.addCall.recurring.on !== rdOptionRecurring.doNotRepeat &&
+            this.props.addCall.recurring.endDateType ===
+              rdOptionRecurringEndDate.endDate
+              ? moment(this.props.addCall.recurring.endDate).format(
+                  "YYYY-MM-DD"
+                )
+              : "",
+          weekly:
+            this.props.addCall.recurring.on === rdOptionRecurring.weekly
+              ? this.props.addCall.recurring.weeklyDays
+              : ""
+        };
+        //console.log("Validation success -->> saveObj: ", saveObj);
+        CallService.saveCall(saveObj)
+          .then(res => {
+            //console.log("onCallSaveValid res: ", res);
+            if (res.success === true) {
+              this.props.onCallSaveSuccessAction();
+              this.props.navigation.navigate("CallListRoute");
+            }
+          })
+          .catch(err => {
+            //console.log("onCallSaveValid Error: ", err);
+          });
+      } else if (this.state._id > 0) {
+        // UPDATE
+        let updateColumnsObj = [
+          {
+            name: "contact_name",
+            data: this.state.contactName
+          },
+          {
+            name: "phone_number",
+            data: this.state.phoneNumber
+          },
+          {
+            name: "schedule_date",
+            data: moment(this.state.date).format("YYYY-MM-DD HH:mm:ss")
+          },
+          {
+            name: "color_type_id",
+            data: this.state.color
+          },
+          {
+            name: "note",
+            data: this.state.note
+          },
+          {
+            name: "recurring_type_id",
+            data: this.props.addCall.recurring.on
+          },
+          {
+            name: "recurring_end_date_type_id",
+            data:
+              this.props.addCall.recurring.on !== rdOptionRecurring.doNotRepeat
+                ? this.props.addCall.recurring.endDateType
+                : 0
+          },
+          {
+            name: "recurring_end_date",
+            data:
+              this.props.addCall.recurring.on !==
+                rdOptionRecurring.doNotRepeat &&
+              this.props.addCall.recurring.endDateType ===
+                rdOptionRecurringEndDate.endDate
+                ? moment(this.props.addCall.recurring.endDate).format(
+                    "YYYY-MM-DD"
+                  )
+                : ""
+          },
+          {
+            name: "weekly",
+            data:
+              this.props.addCall.recurring.on === rdOptionRecurring.weekly
+                ? this.props.addCall.recurring.weeklyDays
+                : ""
+          }
+        ];
+        // console.log(
+        //   "Validation success -->> updateColumnsObj: ",
+        //   updateColumnsObj
+        // );
+        CallService.updateCall(updateColumnsObj, this.state._id)
+          .then(res => {
+            //console.log("onCallSaveValid updateCall res: ", res);
+            if (res.success === true) {
+              this.props.onCallSaveSuccessAction();
+              this.props.navigation.navigate("CallListRoute");
+            }
+          })
+          .catch(err => {
+            //console.log("onCallSaveValid Error: ", err);
+          });
+      }
     }
   }
 
@@ -151,7 +303,6 @@ export default class AddCallScreen extends ValidationComponent {
   handleOnPhoneNumberChange(text) {
     if (text != "") {
       this.setState({ phoneNumber: text }, () => {
-
         const regExPhoneNumber = /^[0-9 \+\-\(\)]+$/;
         if (regExPhoneNumber.test(text)) {
           this.setState({ phoneNumber: text }, () => {
@@ -160,22 +311,23 @@ export default class AddCallScreen extends ValidationComponent {
           this.setState({
             //isOnlyNumberHyphen: true,
             phoneNumber_error: false,
-            phoneNumber_error_message: '',
+            phoneNumber_error_message: ""
           });
         } else {
           // if (isOnSubmit === true || this.state.phoneNumber_error) {
-            this.setState({
-              //isOnlyNumberHyphen: false,
-              phoneNumber_error: true,
-              phoneNumber_error_message: "Phone number should have numbers, - and ( ) only."
-            });
+          this.setState({
+            //isOnlyNumberHyphen: false,
+            phoneNumber_error: true,
+            phoneNumber_error_message:
+              "Phone number should have numbers, - and ( ) only."
+          });
           // }
         }
       });
     } else {
-        this.setState({ phoneNumber: text }, () => {
-          this.validatePhoneNumber();
-        });
+      this.setState({ phoneNumber: text }, () => {
+        this.validatePhoneNumber();
+      });
     }
   }
 
@@ -185,15 +337,19 @@ export default class AddCallScreen extends ValidationComponent {
   validatePhoneNumber() {
     // Call ValidationComponent validate method
     this.validate({
-      phoneNumber: { required: true },
+      phoneNumber: { required: true }
     });
 
-    if (this.isFieldInError('phoneNumber')) {
-      let errorType = '', errorMessage = '';
-      let errorObj = this.getErrorMessage('phoneNumber');
+    if (this.isFieldInError("phoneNumber")) {
+      let errorType = "",
+        errorMessage = "";
+      let errorObj = this.getErrorMessage("phoneNumber");
       if (errorObj.messages.required !== undefined) {
-        errorType = 'required';
-        errorMessage = errorObj.messages.required.replace("{fieldName}", 'Phone number');
+        errorType = "required";
+        errorMessage = errorObj.messages.required.replace(
+          "{fieldName}",
+          "Phone number"
+        );
       }
       this.setState({
         phoneNumber_error: true,
@@ -202,11 +358,10 @@ export default class AddCallScreen extends ValidationComponent {
     } else {
       this.setState({
         phoneNumber_error: false,
-        phoneNumber_error_message: '',
+        phoneNumber_error_message: ""
       });
     }
   }
-
 
   async openDate() {
     try {
@@ -214,15 +369,23 @@ export default class AddCallScreen extends ValidationComponent {
         // Use `new Date()` for current date.
         // May 25 2020. Month 0 is January.
         minDate: new Date(),
-        mode: 'spinner',
+        mode: "spinner",
         date: this.state.date
       });
       if (action !== DatePickerAndroid.dismissedAction) {
         // Selected year, month (0-11), day
-        this.setState({ date: new Date(year, month, day, this.state.date.getHours(), this.state.date.getMinutes()) });
+        this.setState({
+          date: new Date(
+            year,
+            month,
+            day,
+            this.state.date.getHours(),
+            this.state.date.getMinutes()
+          )
+        });
       }
     } catch ({ code, message }) {
-      console.warn('Cannot open date picker', message);
+      console.warn("Cannot open date picker", message);
     }
   }
 
@@ -231,20 +394,29 @@ export default class AddCallScreen extends ValidationComponent {
       const { action, hour, minute } = await TimePickerAndroid.open({
         hour: this.state.date.getHours(),
         minute: this.state.date.getMinutes(),
-        is24Hour: false, // Will display '2 PM'
+        is24Hour: false // Will display '2 PM'
       });
       if (action !== TimePickerAndroid.dismissedAction) {
         // Selected hour (0-23), minute (0-59)
-        this.setState({ date: new Date(this.state.date.getFullYear(), this.state.date.getMonth(), this.state.date.getDate(), hour, minute, 0) });
+        this.setState({
+          date: new Date(
+            this.state.date.getFullYear(),
+            this.state.date.getMonth(),
+            this.state.date.getDate(),
+            hour,
+            minute,
+            0
+          )
+        });
       }
     } catch ({ code, message }) {
-      console.warn('Cannot open time picker', message);
+      console.warn("Cannot open time picker", message);
     }
   }
 
   openRecurring() {
     //console.log('recurringRoute: ', this.props.navigation);
-    this.props.navigation.navigate('RecurringRoute');
+    this.props.navigation.navigate("RecurringRoute");
   }
 
   onColorSelect(color) {
@@ -266,26 +438,29 @@ export default class AddCallScreen extends ValidationComponent {
   );
 
   getPhoneNumber() {
-    return selectContactPhone()
-      .then(selection => {
+    if (this.state.isReadContactsGranted === true) {
+      return selectContactPhone().then(selection => {
         if (!selection) {
           return null;
         }
 
         let { contact, selectedPhone } = selection;
         //console.log(`Selected ${selectedPhone.type} phone number ${selectedPhone.number} from ${contact.name}`);
-        this.setState({
-          contactName: contact.name,
-          phoneNumber: selectedPhone.number
-        }, () => {
-          this.handleOnPhoneNumberChange(selectedPhone.number)
-        });
+        this.setState(
+          {
+            contactName: contact.name,
+            phoneNumber: selectedPhone.number
+          },
+          () => {
+            this.handleOnPhoneNumberChange(selectedPhone.number);
+          }
+        );
         return selectedPhone.number;
       });
+    } else {
+      alert("Permission denied for read contacts.");
+    }
   }
-
-
-
 
   onChange(text) {
     this.task = text;
@@ -302,40 +477,55 @@ export default class AddCallScreen extends ValidationComponent {
   render() {
     //const item = this.props.item;
 
-    let recurringString = 'Recurring: ';
+    let recurringString = "Recurring: ";
     switch (this.props.addCall.recurring.on) {
       case rdOptionRecurring.doNotRepeat:
-        recurringString += I18n.t('rdOptionRecurring.doNotRepeat');
+        recurringString += I18n.t("rdOptionRecurring.doNotRepeat");
         break;
       case rdOptionRecurring.daily:
-        recurringString += I18n.t('rdOptionRecurring.daily') + ' ';
+        recurringString += I18n.t("rdOptionRecurring.daily") + " ";
         break;
       case rdOptionRecurring.weekly:
-        recurringString += I18n.t('rdOptionRecurring.weekly') + ' ';
+        recurringString += I18n.t("rdOptionRecurring.weekly") + " ";
         break;
       case rdOptionRecurring.monthly:
-        recurringString += I18n.t('rdOptionRecurring.monthly') + ' ';
+        recurringString += I18n.t("rdOptionRecurring.monthly") + " ";
         break;
     }
     switch (this.props.addCall.recurring.endDateType) {
       case rdOptionRecurringEndDate.forever:
-        recurringString += '(' + I18n.t('rdOptionRecurringEndDate.forever').toLowerCase() + ')';
+        recurringString +=
+          "(" + I18n.t("rdOptionRecurringEndDate.forever").toLowerCase() + ")";
         break;
       case rdOptionRecurringEndDate.endDate:
-        recurringString += '(' + I18n.t('words.until') + ' ';
-        recurringString += moment(this.props.addCall.recurring.endDate).format("MMM DD, YYYY");
-        recurringString += ')';
+        recurringString += "(" + I18n.t("words.until") + " ";
+        recurringString += moment(this.props.addCall.recurring.endDate).format(
+          "MMM DD, YYYY"
+        );
+        recurringString += ")";
         break;
     }
 
     return (
       <View style={styles.container}>
-
         <View style={[styles.row, styles.firstRow]}>
           <View style={styles.colLeft}>
-            <Icon name='person' color={stylesColors.icon_color} size={25} />
+            <Icon name="person" color={stylesColors.icon_color} size={25} />
           </View>
-          <View style={[styles.inputView, this.state.isFocusedContactName ? { borderBottomColor: stylesColors.text_input_border_bottom_color_active } : { borderBottomColor: stylesColors.text_input_border_bottom_color }]}>
+          <View
+            style={[
+              styles.inputView,
+              this.state.isFocusedContactName
+                ? {
+                    borderBottomColor:
+                      stylesColors.text_input_border_bottom_color_active
+                  }
+                : {
+                    borderBottomColor:
+                      stylesColors.text_input_border_bottom_color
+                  }
+            ]}
+          >
             <TextInput
               style={styles.input}
               placeholder="Contact name"
@@ -347,15 +537,35 @@ export default class AddCallScreen extends ValidationComponent {
             />
           </View>
           <View style={styles.colRight}>
-            <Icon name='person-add' color={stylesColors.icon_color} size={25} onPress={() => { this.getPhoneNumber() }} />
+            <Icon
+              name="person-add"
+              color={stylesColors.icon_color}
+              size={25}
+              onPress={() => {
+                this.getPhoneNumber();
+              }}
+            />
           </View>
         </View>
 
         <View style={[styles.row]}>
           <View style={styles.colLeft}>
-            <Icon name='call' color={stylesColors.icon_color} size={25} />
+            <Icon name="call" color={stylesColors.icon_color} size={25} />
           </View>
-          <View style={[styles.inputView, this.state.isFocusedPhoneNumber ? { borderBottomColor: stylesColors.text_input_border_bottom_color_active } : { borderBottomColor: stylesColors.text_input_border_bottom_color }]}>
+          <View
+            style={[
+              styles.inputView,
+              this.state.isFocusedPhoneNumber
+                ? {
+                    borderBottomColor:
+                      stylesColors.text_input_border_bottom_color_active
+                  }
+                : {
+                    borderBottomColor:
+                      stylesColors.text_input_border_bottom_color
+                  }
+            ]}
+          >
             <TextInput
               style={styles.input}
               placeholder="Phone number"
@@ -363,47 +573,57 @@ export default class AddCallScreen extends ValidationComponent {
               selectionColor={stylesColors.selection_color}
               keyboardType="numeric"
               returnKeyType="next"
-              onFocus={() => { this.setState({ isFocusedPhoneNumber: true }) }}
-              onEndEditing={() => { this.setState({ isFocusedPhoneNumber: false }) }}
+              onFocus={() => {
+                this.setState({ isFocusedPhoneNumber: true });
+              }}
+              onEndEditing={() => {
+                this.setState({ isFocusedPhoneNumber: false });
+              }}
               value={this.state.phoneNumber}
               //onChangeText={(phoneNumber) => this.setState({phoneNumber})}
-              onChangeText={(text) => this.handleOnPhoneNumberChange(text)}
+              onChangeText={text => this.handleOnPhoneNumberChange(text)}
               maxLength={20}
             />
           </View>
 
-          <View style={styles.colRight}>
-          </View>
+          <View style={styles.colRight} />
         </View>
 
-        {
-          this.state.phoneNumber_error &&
-          <View style={[styles.row, styles.firstRow, {paddingTop:0}]}>
-            <View style={styles.colLeft}>
-            </View>
-            <View style={{flex:1}}>
-              <FormValidationMessage
-                labelStyle={gStyle.formValidationMessage}
-              >
-                {
-                  this.state.phoneNumber_error_message
-                }
+        {this.state.phoneNumber_error && (
+          <View style={[styles.row, styles.firstRow, { paddingTop: 0 }]}>
+            <View style={styles.colLeft} />
+            <View style={{ flex: 1 }}>
+              <FormValidationMessage labelStyle={gStyle.formValidationMessage}>
+                {this.state.phoneNumber_error_message}
               </FormValidationMessage>
             </View>
-            <View style={styles.colRight}>
-            </View>
+            <View style={styles.colRight} />
           </View>
-        }
+        )}
 
         <View style={[styles.row]}>
           <View style={styles.colLeft}>
-            <Icon name='event' color={stylesColors.icon_color} size={25} />
+            <Icon name="event" color={stylesColors.icon_color} size={25} />
           </View>
           <View style={styles.dateTimeContainer}>
-            <View style={[styles.inputView, styles.dateView, this.state.isFocusedDate ? { borderBottomColor: stylesColors.text_input_border_bottom_color_active } : { borderBottomColor: stylesColors.text_input_border_bottom_color }]}>
+            <View
+              style={[
+                styles.inputView,
+                styles.dateView,
+                this.state.isFocusedDate
+                  ? {
+                      borderBottomColor:
+                        stylesColors.text_input_border_bottom_color_active
+                    }
+                  : {
+                      borderBottomColor:
+                        stylesColors.text_input_border_bottom_color
+                    }
+              ]}
+            >
               <TextInput
                 style={[styles.input, styles.dateTextInput]}
-                //onChangeText={this.onChange.bind(this)} 
+                //onChangeText={this.onChange.bind(this)}
                 placeholder="Date"
                 placeholderTextColor={stylesColors.place_holder_text_color}
                 selectionColor={stylesColors.selection_color}
@@ -412,16 +632,39 @@ export default class AddCallScreen extends ValidationComponent {
                   this.setState({ isFocusedDate: true });
                   this.openDate();
                 }}
-                onEndEditing={() => { this.setState({ isFocusedDate: false }) }}
+                onEndEditing={() => {
+                  this.setState({ isFocusedDate: false });
+                }}
                 value={moment(this.state.date).format("MMM DD, YYYY")}
               />
-              <Icon name='arrow-drop-down' color={stylesColors.icon_color} size={25} onPress={() => { this.openDate(); }} />
+              <Icon
+                name="arrow-drop-down"
+                color={stylesColors.icon_color}
+                size={25}
+                onPress={() => {
+                  this.openDate();
+                }}
+              />
             </View>
 
-            <View style={[styles.inputView, styles.timeView, this.state.isFocusedTime ? { borderBottomColor: stylesColors.text_input_border_bottom_color_active } : { borderBottomColor: stylesColors.text_input_border_bottom_color }]}>
+            <View
+              style={[
+                styles.inputView,
+                styles.timeView,
+                this.state.isFocusedTime
+                  ? {
+                      borderBottomColor:
+                        stylesColors.text_input_border_bottom_color_active
+                    }
+                  : {
+                      borderBottomColor:
+                        stylesColors.text_input_border_bottom_color
+                    }
+              ]}
+            >
               <TextInput
                 style={[styles.input, styles.dateTextInput]}
-                //onChangeText={this.onChange.bind(this)} 
+                //onChangeText={this.onChange.bind(this)}
                 placeholder="Date"
                 placeholderTextColor={stylesColors.place_holder_text_color}
                 selectionColor={stylesColors.selection_color}
@@ -430,33 +673,56 @@ export default class AddCallScreen extends ValidationComponent {
                   this.setState({ isFocusedTime: true });
                   this.openTime();
                 }}
-                onEndEditing={() => { this.setState({ isFocusedTime: false }) }}
+                onEndEditing={() => {
+                  this.setState({ isFocusedTime: false });
+                }}
                 value={moment(this.state.date).format("hh:mm A")}
               />
-              <Icon name='arrow-drop-down' color={stylesColors.icon_color} size={25} onPress={() => { this.openTime() }} />
+              <Icon
+                name="arrow-drop-down"
+                color={stylesColors.icon_color}
+                size={25}
+                onPress={() => {
+                  this.openTime();
+                }}
+              />
             </View>
           </View>
-          <View style={styles.colRight}>
-          </View>
+          <View style={styles.colRight} />
         </View>
 
         <View style={[styles.row]}>
           <View style={styles.colLeft}>
-            <Icon name='autorenew' color={stylesColors.icon_color} size={25} />
+            <Icon name="autorenew" color={stylesColors.icon_color} size={25} />
           </View>
 
-          <View style={[styles.inputView, styles.dateView, styles.recurringView, this.state.isFocusedDate ? { borderBottomColor: stylesColors.text_input_border_bottom_color_active } : { borderBottomColor: stylesColors.text_input_border_bottom_color }]}>
+          <View
+            style={[
+              styles.inputView,
+              styles.dateView,
+              styles.recurringView,
+              this.state.isFocusedDate
+                ? {
+                    borderBottomColor:
+                      stylesColors.text_input_border_bottom_color_active
+                  }
+                : {
+                    borderBottomColor:
+                      stylesColors.text_input_border_bottom_color
+                  }
+            ]}
+          >
             <View>
               <TouchableHighlight
-                onPress={() => { this.openRecurring() }}
+                onPress={() => {
+                  this.openRecurring();
+                }}
                 underlayColor={stylesColors.button_underlay_color}
-              //style={css.addCallHeader.touchable}
+                //style={css.addCallHeader.touchable}
               >
                 <Text>
                   {recurringString}
-                  {
-                    /*this.props.addCall.recurring.on === rdOptionRecurring.doNotRepeat ? I18n.t('rdOptionRecurring.doNotRepeat') : (this.props.addCall.recurring.on === rdOptionRecurring.daily ? I18n.t('rdOptionRecurring.daily') : (this.props.addCall.recurring.on === rdOptionRecurring.weekly ? I18n.t('rdOptionRecurring.weekly') : (this.props.addCall.recurring.on === rdOptionRecurring.monthly ? I18n.t('rdOptionRecurring.monthly') : '')))*/
-                  }
+                  {/*this.props.addCall.recurring.on === rdOptionRecurring.doNotRepeat ? I18n.t('rdOptionRecurring.doNotRepeat') : (this.props.addCall.recurring.on === rdOptionRecurring.daily ? I18n.t('rdOptionRecurring.daily') : (this.props.addCall.recurring.on === rdOptionRecurring.weekly ? I18n.t('rdOptionRecurring.weekly') : (this.props.addCall.recurring.on === rdOptionRecurring.monthly ? I18n.t('rdOptionRecurring.monthly') : '')))*/}
                 </Text>
               </TouchableHighlight>
             </View>
@@ -474,11 +740,17 @@ export default class AddCallScreen extends ValidationComponent {
               onEndEditing={() => { this.setState({isFocusedDate: false}) }}
               value={moment(this.state.date).format("MMM DD, YYYY")}
             /> */}
-            <Icon name='arrow-drop-down' color={stylesColors.icon_color} size={25} onPress={() => { this.openRecurring(); }} />
+            <Icon
+              name="arrow-drop-down"
+              color={stylesColors.icon_color}
+              size={25}
+              onPress={() => {
+                this.openRecurring();
+              }}
+            />
           </View>
 
-          <View style={styles.colRight}>
-          </View>
+          <View style={styles.colRight} />
         </View>
 
         <View style={[styles.row]}>
@@ -493,28 +765,43 @@ export default class AddCallScreen extends ValidationComponent {
 
         <View style={[styles.row]}>
           <View style={styles.colLeft}>
-            <Icon name='note' color={stylesColors.icon_color} size={25} />
+            <Icon name="note" color={stylesColors.icon_color} size={25} />
           </View>
-          <View style={[styles.inputView, this.state.isFocusedNote ? { borderBottomColor: stylesColors.text_input_border_bottom_color_active } : { borderBottomColor: stylesColors.text_input_border_bottom_color }]}>
+          <View
+            style={[
+              styles.inputView,
+              this.state.isFocusedNote
+                ? {
+                    borderBottomColor:
+                      stylesColors.text_input_border_bottom_color_active
+                  }
+                : {
+                    borderBottomColor:
+                      stylesColors.text_input_border_bottom_color
+                  }
+            ]}
+          >
             <TextInput
               style={styles.input}
-              //onChangeText={this.onChange.bind(this)} 
+              //onChangeText={this.onChange.bind(this)}
               placeholder="Note"
               placeholderTextColor={stylesColors.place_holder_text_color}
               selectionColor={stylesColors.selection_color}
               returnKeyType="next"
-              onFocus={() => { this.setState({ isFocusedNote: true }) }}
-              onEndEditing={() => { this.setState({ isFocusedNote: false }) }}
+              onFocus={() => {
+                this.setState({ isFocusedNote: true });
+              }}
+              onEndEditing={() => {
+                this.setState({ isFocusedNote: false });
+              }}
               value={this.state.note}
-              onChangeText={(note) => this.setState({note})}
+              onChangeText={note => this.setState({ note })}
               maxLength={255}
             />
           </View>
-          <View style={styles.colRight}>
-          </View>
+          <View style={styles.colRight} />
         </View>
-
       </View>
-    )
+    );
   }
 }

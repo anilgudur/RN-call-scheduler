@@ -1,7 +1,7 @@
-import { get, has } from 'lodash';
+import { get, has } from "lodash";
 
 //import { authUser, forgotPassword } from '../../api';
-import { appConsts } from '../../constants';
+import { appConsts } from "../../constants";
 
 //import OhLogoWhite from '../../../assets/images/OhLogoWhite/OhLogoWhite.png';
 
@@ -13,6 +13,11 @@ const {
 
   // On Call Save
   onCallSaveSuccessReducer,
+
+  // From call list screen
+  editCallReducer,
+  callListRefreshReducer,
+  callListRefreshFalseReducer,
 
   //addCall,
 
@@ -31,47 +36,46 @@ const {
   forgotPasswordSuccess,
   forgotPasswordResetData,
   authWithSAML,
-  refreshToken,
+  refreshToken
 } = appConsts;
 
 export const addCallActions = {
-
   onRecurringTypeSelect(type) {
-    console.log(type);
-    return (dispatch) => {
-      console.log("onRecurringTypeSelect pressed: ", type);
+    //console.log(type);
+    return dispatch => {
+      //console.log("onRecurringTypeSelect pressed: ", type);
       dispatch({
         type: rdRecurringTypeSelectReducer,
-        recurringType: type,
+        recurringType: type
       });
     };
   },
 
   rdRecurringEndDateSelect(rdEndDate) {
-    console.log(rdEndDate);
-    return (dispatch) => {
-      console.log("rdRecurringEndDateSelect pressed: ", rdEndDate);
+    //console.log(rdEndDate);
+    return dispatch => {
+      //console.log("rdRecurringEndDateSelect pressed: ", rdEndDate);
       dispatch({
         type: rdRecurringEndDateTypeSelectReducer,
-        rdEndDate: rdEndDate,
+        rdEndDate: rdEndDate
       });
     };
   },
 
   recurringDateSelect(date) {
-    return (dispatch) => {
-      console.log("recurringDateSelect pressed: ", date);
+    return dispatch => {
+      //console.log("recurringDateSelect pressed: ", date);
       dispatch({
         type: txtRecurringDateSetReducer,
-        recurringDate: new Date(date),
+        recurringDate: new Date(date)
       });
     };
   },
 
   weeklyDaysSelectAction(weeklyDays) {
-    console.log(weeklyDays);
-    return (dispatch) => {
-      console.log("weeklyDaysSelectAction pressed: ", weeklyDays);
+    //console.log(weeklyDays);
+    return dispatch => {
+      //console.log("weeklyDaysSelectAction pressed: ", weeklyDays);
       dispatch({
         type: weeklyDaysSelectReducer,
         weeklyDays: weeklyDays
@@ -80,21 +84,45 @@ export const addCallActions = {
   },
 
   onCallSaveSuccessAction() {
-    return (dispatch) => {
-      console.log("onCallSaveSuccessAction: ");
+    return dispatch => {
+      //console.log("onCallSaveSuccessAction: ");
       dispatch({
         type: onCallSaveSuccessReducer
       });
     };
   },
 
+  editCallAction(item) {
+    return dispatch => {
+      //console.log("editCallAction: ", item);
+      dispatch({
+        type: editCallReducer,
+        item: item
+      });
+    };
+  },
 
+  callListRefreshAction() {
+    return dispatch => {
+      //console.log("callListRefreshAction");
+      dispatch({
+        type: callListRefreshReducer
+      });
+    };
+  },
 
+  callListRefreshFalseAction() {
+    return dispatch => {
+      //console.log("callListRefreshFalseAction");
+      dispatch({
+        type: callListRefreshFalseReducer
+      });
+    };
+  },
 
-
-
+  //TASK
   onAddPress(navigation, task) {
-    return (dispatch) => {
+    return dispatch => {
       // let todos = this.state.todos;
       // todos.push({task: task});
       // this.setState({
@@ -104,31 +132,30 @@ export const addCallActions = {
         type: addTodo,
         task: task
       });
-      console.log('A task was added: ', task);
+      //console.log("A task was added: ", task);
       navigation.goBack();
     };
   },
 
   onDone(todo) {
-    return (dispatch) => {
-      console.log("onDone pressed: ", todo);
+    return dispatch => {
+      //console.log("onDone pressed: ", todo);
       // let filteredTodos = this.state.todos.filter((fTodo) => {
-      //   return fTodo !== todo; 
+      //   return fTodo !== todo;
       // });
       // this.setState({ todos: filteredTodos });
       dispatch({
         type: doneTodo,
-        todo: todo,
+        todo: todo
       });
     };
   },
 
   onToggle() {
-    return (dispatch) => {
+    return dispatch => {
       dispatch({
-        type: 'TOGGLE_STATE',
+        type: "TOGGLE_STATE"
       });
     };
-  },
-
+  }
 };

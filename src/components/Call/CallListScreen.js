@@ -7,7 +7,7 @@ import {
   Platform
 } from "react-native";
 import PropTypes from "prop-types";
-import { MenuIcon, MenuTitle, CallListHeader } from "../../Header/Headers";
+import { MenuIcon, MenuTitle } from "../../Header/Headers";
 import { Icon, FormValidationMessage } from "react-native-elements";
 import {
   addCallScreen as styles,
@@ -34,6 +34,7 @@ import UpcomingCallsTabScreen from "./CallListType/UpcomingCallsTabScreen";
 import OldCallsTabScreen from "./CallListType/OldCallsTabScreen";
 import RecurringCallsTabScreen from "./CallListType/RecurringCallsTabScreen";
 import CompletedCallsTabScreen from "./CallListType/CompletedCallsTabScreen";
+import Touchable from "react-native-platform-touchable";
 
 const stringifyObject = require("stringify-object");
 
@@ -198,11 +199,26 @@ export default class CallListScreen extends Component {
       headerTitle: (
         <MenuTitle navigation={navigation} titleName={"Call Planner"} />
       ),
-      headerRight: <Icon name="more-vert" color="white" size={20} />
+      headerRight: (
+        <Touchable
+          onPress={() => navigate("AddCallRoute")}
+          style={[
+            {
+              padding: 10,
+              borderRadius: 30,
+              flex: 1
+            }
+          ]}
+          background={Touchable.Ripple("blue", true)}
+        >
+          <Icon name="add" color="white" size={25} />
+        </Touchable>
+      )
     };
   };
 
   componentDidMount() {
+    console.log("CallListScreen props: ", this.props);
     // CallService.getCallList()
     //   .then(res => {
     //     //console.log("----------res", res);
@@ -233,7 +249,8 @@ export default class CallListScreen extends Component {
     return (
       <View style={styles.container}>
         <CallsTab
-        //screenProps={this.state.sendProps}
+          //screenProps={this.state.sendProps}
+          screenProps={this.props}
         />
       </View>
     );

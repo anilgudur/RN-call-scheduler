@@ -49,7 +49,7 @@ class DBDefinitionService {
               });
           })
           .catch(error => {
-            console.log("db -> echoTest failed - plugin not functional");
+            //console.log("db -> echoTest failed - plugin not functional");
             //console.log("echoTest failed - plugin not functional");
             resolve(true);
           });
@@ -94,7 +94,7 @@ class DBDefinitionService {
           //console.log("db -> Database not yet ready ... populating data");
           db.transaction(this.populateDB).then(() => {
             //console.log("db -> Database populated ... executing query ...");
-            this.closeDatabase();
+            //this.closeDatabase();
             resolve(true);
             // db.transaction(this.queryEmployees).then((result) => {
             //   console.log("db -> Transaction is now finished");
@@ -133,7 +133,7 @@ class DBDefinitionService {
         ");";
       //console.log('db -> query:: ', query);
       tx.executeSql(query).catch(error => {
-        console.log("db -> Error executeSql: ", error);
+        //console.log("db -> Error executeSql: ", error);
         //this.errorCB(error);
       });
     });
@@ -151,10 +151,10 @@ class DBDefinitionService {
           //console.log("db -> Database CLOSED");
         })
         .catch(error => {
-          console.log("db -> closeDatabase error", error);
+          //console.log("db -> closeDatabase error", error);
         });
     } else {
-      console.log("db -> Database was not OPENED");
+      //console.log("db -> Database was not OPENED");
     }
   };
 
@@ -331,21 +331,21 @@ class DBDefinitionService {
                                 //console.log('Success: ', res);
                               })
                               .catch(err => {
-                                console.log("db -> Error renameQuery: ", err);
+                                //console.log("db -> Error renameQuery: ", err);
                               });
                           })
                           .catch(error => {
-                            console.log("db -> Error dropQuery: ", error);
+                            //console.log("db -> Error dropQuery: ", error);
                             //this.errorCB(error);
                           });
                       })
                       .catch(error => {
-                        console.log("db -> Error insertQuery: ", error);
+                        //console.log("db -> Error insertQuery: ", error);
                         //this.errorCB(error);
                       });
                   })
                   .catch(error => {
-                    console.log("db -> Error createNewquery: ", error);
+                    //console.log("db -> Error createNewquery: ", error);
                     //this.errorCB(error);
                   });
               }

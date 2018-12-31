@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, FlatList } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import PropTypes from "prop-types";
 import { tabs as tabsStyle } from "../../../Styles/Styles";
 import moment from "moment";
@@ -8,8 +8,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import CallService from "../../../Services/CallService";
 
 export default class OldCallsTabScreen extends Component {
-  static propTypes = {
-  };
+  static propTypes = {};
 
   static navigationOptions = {
     tabBarLabel: "Old"
@@ -34,23 +33,39 @@ export default class OldCallsTabScreen extends Component {
   }
 
   componentDidMount() {
-    CallService.getCallList().then(res => {
-      CallService.callListTypeFilterAW(res, "OLD").then(filteredRes => {
-        this.setState({
-          oldArr: filteredRes.oldArr,
-          oldDatesArr: filteredRes.oldDatesArr,
-          isLoaded: true
-        });
+    this.getCallList();
+  }
+
+  componentWillReceiveProps() {
+    // console.log(">>>", this.props.screenProps.callListRefresh);
+    // console.log("<<<", this.state.callListRefresh);
+    if (this.props.screenProps.callListRefresh === true) {
+      this.getCallList();
+    }
+  }
+
+  getCallList() {
+    //console.log(".....getCallList");
+    CallService.getCallList()
+      .then(res => {
+        CallService.callListTypeFilterAW(res, "OLD")
+          .then(filteredRes => {
+            this.setState({
+              oldArr: filteredRes.oldArr,
+              oldDatesArr: filteredRes.oldDatesArr,
+              isLoaded: true,
+              extraData_callColors: !this.state.extraData_callColors
+            });
+          })
+          .catch(err => {
+            //console.log("CallService.callListTypeFilter() Error:: ", err);
+            this.setState({ isLoaded: true });
+          });
       })
       .catch(err => {
-        console.log("CallService.callListTypeFilter() Error:: ", err);
+        //console.log("CallService.getCallList() Error:: ", err);
         this.setState({ isLoaded: true });
       });
-    })
-    .catch(err => {
-      console.log("CallService.getCallList() Error:: ", err);
-      this.setState({ isLoaded: true });
-    });
   }
 
   _keyExtractor_callColorsRow = (item, index) => index.toString();
@@ -60,8 +75,41 @@ export default class OldCallsTabScreen extends Component {
       index={index}
       item={item}
       dataArr={this.state.oldArr}
+      screenProps={this.props.screenProps}
+      onMoveToCompletedPressed={this.onMoveToCompletedPressed}
+      onDeleteCallPressed={this.onDeleteCallPressed}
     />
   );
+
+  onMoveToCompletedPressed = item => {
+    CallService.moveToCompleted(item)
+      .then(res => {
+        //console.log("onCallSaveValid res: ", res);
+        if (res.success === true) {
+          //this.getCallList();
+          this.props.screenProps.callListRefreshAction();
+          this.props.screenProps.callListRefreshFalseAction();
+        }
+      })
+      .catch(err => {
+        //console.log("onCallSaveValid Error: ", err);
+      });
+  };
+
+  onDeleteCallPressed = item => {
+    CallService.deleteCall(item)
+      .then(res => {
+        //console.log("onCallSaveValid res: ", res);
+        if (res.success === true) {
+          //this.getCallList();
+          this.props.screenProps.callListRefreshAction();
+          this.props.screenProps.callListRefreshFalseAction();
+        }
+      })
+      .catch(err => {
+        //console.log("onCallSaveValid Error: ", err);
+      });
+  };
 
   render() {
     if (!this.state.isLoaded) {
@@ -74,6 +122,11 @@ export default class OldCallsTabScreen extends Component {
           paddingTop: 15
         }}
       >
+        {this.state.oldArr.length === 0 && (
+          <Text style={{ color: "red", textAlign: "center" }}>
+            No calls found.
+          </Text>
+        )}
         <FlatList
           data={this.state.oldDatesArr}
           extraData={this.state.extraData_callColors}
@@ -83,5 +136,4 @@ export default class OldCallsTabScreen extends Component {
       </View>
     );
   }
-
 }
