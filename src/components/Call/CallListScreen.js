@@ -36,6 +36,7 @@ import OldCallsTabScreen from "./CallListType/OldCallsTabScreen";
 import RecurringCallsTabScreen from "./CallListType/RecurringCallsTabScreen";
 import CompletedCallsTabScreen from "./CallListType/CompletedCallsTabScreen";
 import Touchable from "react-native-platform-touchable";
+import { LoadingComponent } from "../CommonComponents/CommonComponents";
 
 const stringifyObject = require("stringify-object");
 
@@ -197,10 +198,11 @@ export default class CallListScreen extends Component {
     const { navigate } = navigation;
     return {
       headerLeft: (
-        <MenuIcon
-          navigation={navigation}
-          onPress={() => navigate("DrawerOpen")}
-        />
+        <View />
+        // <MenuIcon
+        //   navigation={navigation}
+        //   onPress={() => navigate("DrawerOpen")}
+        // />
       ),
       headerTitle: (
         <MenuTitle navigation={navigation} titleName={"Call Planner"} />
@@ -253,7 +255,8 @@ export default class CallListScreen extends Component {
 
   render() {
     if (!this.state.isLoaded) {
-      return null;
+      //return null;
+      return <LoadingComponent />;
     }
 
     return (

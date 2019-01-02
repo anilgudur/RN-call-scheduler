@@ -6,6 +6,7 @@ import moment from "moment";
 import CallDateRow from "../CallDateRow";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import CallService from "../../../Services/CallService";
+import { LoadingComponent } from "../../CommonComponents/CommonComponents";
 
 export default class OldCallsTabScreen extends Component {
   static propTypes = {};
@@ -113,7 +114,8 @@ export default class OldCallsTabScreen extends Component {
 
   render() {
     if (!this.state.isLoaded) {
-      return null;
+      //return null;
+      return <LoadingComponent />;
     }
 
     return (

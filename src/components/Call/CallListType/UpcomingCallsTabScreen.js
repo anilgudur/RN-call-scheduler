@@ -6,6 +6,7 @@ import moment from "moment";
 import CallDateRow from "../CallDateRow";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import CallService from "../../../Services/CallService";
+import { LoadingComponent } from "../../CommonComponents/CommonComponents";
 
 export default class UpcomingCallsTabScreen extends Component {
   static propTypes = {};
@@ -50,6 +51,7 @@ export default class UpcomingCallsTabScreen extends Component {
       .then(res => {
         CallService.callListTypeFilterAW(res, "UPCOMING")
           .then(filteredRes => {
+            console.log("filteredRes", filteredRes);
             this.setState({
               upcomingArr: filteredRes.upcomingArr,
               upcomingDatesArr: filteredRes.upcomingDatesArr,
@@ -112,7 +114,8 @@ export default class UpcomingCallsTabScreen extends Component {
 
   render() {
     if (!this.state.isLoaded) {
-      return null;
+      //return null;
+      return <LoadingComponent />;
     }
 
     return (

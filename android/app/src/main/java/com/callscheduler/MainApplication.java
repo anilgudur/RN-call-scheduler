@@ -3,6 +3,7 @@ package com.callscheduler;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.actionsheet.ActionSheetPackage;
 import com.streem.selectcontact.SelectContactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -30,6 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new SQLitePluginPackage(),   // register SQLite Plugin here
           new MainReactPackage(),
+            new SplashScreenReactPackage(),
             new ActionSheetPackage(),
             new SelectContactPackage(),
             new VectorIconsPackage(),

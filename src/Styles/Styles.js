@@ -193,6 +193,16 @@ export const global = StyleSheet.create({
 
   formValidationMessage: {
     marginLeft: 0
+  },
+  loading: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: "center",
+    justifyContent: "center"
+    //backgroundColor: "rgba(0,0,0,.2)"
   }
 });
 

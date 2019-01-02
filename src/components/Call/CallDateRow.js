@@ -37,11 +37,19 @@ export default class CallDateRow extends Component {
   }
 
   async componentDidMount() {
+    let todaysDate = new Date();
+    todaysDate = new Date(
+      todaysDate.getFullYear(),
+      todaysDate.getMonth(),
+      todaysDate.getDate(),
+      0,
+      0,
+      0
+    );
     let newArr = await this.filterData(this.props.item, this.props.dataArr);
-
     this.setState({
       newDataArr: newArr,
-      diffDays: moment(new Date(this.props.item)).diff(moment([]), "days"),
+      diffDays: moment(this.props.item).diff(todaysDate, "days"),
       generatedDateFormat: moment(this.props.item).format("DD-MM-YYYY"),
       isLoaded: true
     });

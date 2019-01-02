@@ -12,6 +12,7 @@ import AppService from "../../Services/AppService";
 import DB from "../../Services/DBDefinitionService";
 
 import { DB_CONFIG } from "../../Config/DBConfig";
+import SplashScreen from "react-native-splash-screen";
 
 const BG_WHITE_OPACITY = "rgba(0, 0, 0, 0.7)"; //'rgba(68, 68, 68, 1)'
 
@@ -32,6 +33,10 @@ export default class Application extends PureComponent {
   }
 
   componentDidMount() {
+    // do stuff while splash screen is shown
+    // After having done stuff (such as async tasks) hide the splash screen
+    SplashScreen.hide();
+
     // SQLite Database
     AppService.getDbVersion()
       .then(dbVersion => {

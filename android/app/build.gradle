@@ -149,6 +149,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-splash-screen')
     compile project(':@yfuks_react-native-action-sheet')
     compile project(':react-native-select-contact')
     compile project(':react-native-vector-icons')
