@@ -13,6 +13,11 @@ import Communications from "react-native-communications";
 import Touchable from "react-native-platform-touchable";
 import OptionsMenu from "react-native-options-menu";
 const { callColorOptions, callColors } = appConsts;
+import {
+  MyAppText,
+  CallListPhoneText,
+  CallListNoteText
+} from "../AppText/AppText";
 
 // const styles = StyleSheet.create({
 //   container: {
@@ -95,7 +100,7 @@ export default class CallRow extends Component {
         <View
           style={{
             //flex:1
-            paddingRight: 10,
+            paddingRight: 15,
             paddingTop: 6,
             alignContent: "center"
           }}
@@ -108,17 +113,17 @@ export default class CallRow extends Component {
               console.log("pressed details icon");
             }}
             activeOpacity={1.0}
-            titleStyle={{ fontSize: 12 }}
-            containerStyle={{ marginLeft: 6 }}
-            overlayContainerStyle={[
-              { backgroundColor: callColors[color] },
-              { width: 30, height: 30, color: "red" }
-            ]}
-            titleStyle={
+            titleStyle={[
+              { fontSize: 22, fontFamily: "Roboto-Light" },
               callColors[color] === "#FFFFFF"
                 ? { color: "#000000" }
                 : { color: "#FFFFFF" }
-            }
+            ]}
+            containerStyle={{ marginLeft: 6 }}
+            overlayContainerStyle={[
+              { backgroundColor: callColors[color] },
+              { width: 35, height: 35, color: "red" }
+            ]}
           />
         </View>
         <View
@@ -137,14 +142,14 @@ export default class CallRow extends Component {
           >
             <View>
               <View>
-                <Text style={{ fontSize: 14 }} numberOfLines={1}>
+                <MyAppText numberOfLines={1}>
                   {item.contact_name || "Default"}
-                </Text>
+                </MyAppText>
               </View>
               <View>
-                <Text style={{ fontSize: 12 }} numberOfLines={1}>
+                <CallListPhoneText numberOfLines={1}>
                   {item.phone_number}
-                </Text>
+                </CallListPhoneText>
               </View>
               <View
                 style={{
@@ -154,17 +159,18 @@ export default class CallRow extends Component {
                 }}
               >
                 {item.recurring_type_id !== 1 && (
-                  <Icon name="autorenew" color="#666666" size={15} />
+                  <Icon
+                    name='autorenew'
+                    color='#01C853'
+                    size={15}
+                    containerStyle={[
+                      item.recurring_type_id !== 1 ? { paddingRight: 5 } : {}
+                    ]}
+                  />
                 )}
-                <Text
-                  style={[
-                    { fontSize: 10 },
-                    item.recurring_type_id !== 1 ? { paddingLeft: 5 } : {}
-                  ]}
-                  numberOfLines={1}
-                >
+                <CallListNoteText numberOfLines={1}>
                   {item.note}
-                </Text>
+                </CallListNoteText>
               </View>
             </View>
           </TouchableHighlight>
@@ -172,7 +178,7 @@ export default class CallRow extends Component {
         <View style={{ width: 40 }}>
           <OptionsMenu
             //customButton={<Icon name="more-vert" color="#333333" size={20} />}
-            customButton={<Icon name="more-vert" color="#333333" size={20} />}
+            customButton={<Icon name='more-vert' color='#7F8C8D' size={20} />}
             destructiveIndex={1}
             options={["Edit", "Move to Completed", "Delete"]}
             actions={[
@@ -183,9 +189,9 @@ export default class CallRow extends Component {
           />
         </View>
         <View style={{ width: 55 }}>
-          <Text style={{ fontSize: 11 }}>
+          <CallListPhoneText>
             {moment(item.schedule_date).format("hh:mm A")}
-          </Text>
+          </CallListPhoneText>
         </View>
         <View style={{ width: 50, height: 68, justifyContent: "center" }}>
           <Touchable
@@ -198,7 +204,7 @@ export default class CallRow extends Component {
             }}
             background={Touchable.Ripple("blue", true)}
           >
-            <Icon name="call" color="#333333" size={20} containerStyle={{}} />
+            <Icon name='call' color='#4C4C4C' size={20} containerStyle={{}} />
           </Touchable>
         </View>
       </View>

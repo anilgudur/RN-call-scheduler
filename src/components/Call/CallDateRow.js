@@ -94,8 +94,9 @@ export default class CallDateRow extends Component {
           style={{
             paddingLeft: 12,
             paddingBottom: 5,
-            fontSize: 12,
-            fontWeight: "bold"
+            fontSize: 13,
+            fontFamily: "Roboto-Medium",
+            color: "#636363"
           }}
         >
           {this.state.diffDays === 0

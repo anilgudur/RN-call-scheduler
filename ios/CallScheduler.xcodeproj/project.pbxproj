@@ -56,6 +56,11 @@
 		0B54E0BF30F54E5BB0501554 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 33530F164C03443A926C666B /* SimpleLineIcons.ttf */; };
 		C07BD61CFA9946AEA1067780 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F7106774AF7484FA7CB1FD2 /* Zocial.ttf */; };
 		71BB104F6A5D4A1F9F37B878 /* libRCTSelectContact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C72878803804B63A4E2DFA6 /* libRCTSelectContact.a */; };
+		D2C8DED0F03A4522AE98BC1E /* libSQLite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2587F320CBF74449AD1E1200 /* libSQLite.a */; };
+		9DB1D0A29D3040C5A80A09BC /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C0D0DF1BE36A49379D20C721 /* Roboto-Light.ttf */; };
+		8D5ECDD644814527B087E367 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6D39D9F0DE3741CBAC2113A3 /* Roboto-Medium.ttf */; };
+		D90FF978E0A24BCDA0870678 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A70DC6A700EB45E488E31DFE /* Roboto-Regular.ttf */; };
+		1120779628CD4032B837D280 /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A12BC562F9A243788A8ADA6C /* Roboto-Thin.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -383,6 +388,12 @@
 		6F7106774AF7484FA7CB1FD2 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		F3A73B90C92548EC80D9CE09 /* SelectContact.xcodeproj */ = {isa = PBXFileReference; name = "SelectContact.xcodeproj"; path = "../node_modules/react-native-select-contact/ios/SelectContact.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		3C72878803804B63A4E2DFA6 /* libRCTSelectContact.a */ = {isa = PBXFileReference; name = "libRCTSelectContact.a"; path = "libRCTSelectContact.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		C83114926C9B4CFA95D39B16 /* SQLite.xcodeproj */ = {isa = PBXFileReference; name = "SQLite.xcodeproj"; path = "../node_modules/react-native-sqlite-storage/src/ios/SQLite.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		2587F320CBF74449AD1E1200 /* libSQLite.a */ = {isa = PBXFileReference; name = "libSQLite.a"; path = "libSQLite.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		C0D0DF1BE36A49379D20C721 /* Roboto-Light.ttf */ = {isa = PBXFileReference; name = "Roboto-Light.ttf"; path = "../assets/fonts/Roboto-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6D39D9F0DE3741CBAC2113A3 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; name = "Roboto-Medium.ttf"; path = "../assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A70DC6A700EB45E488E31DFE /* Roboto-Regular.ttf */ = {isa = PBXFileReference; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A12BC562F9A243788A8ADA6C /* Roboto-Thin.ttf */ = {isa = PBXFileReference; name = "Roboto-Thin.ttf"; path = "../assets/fonts/Roboto-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -413,6 +424,7 @@
 				36703611FBF54ADC9F4D427E /* libReactNativeConfig.a in Frameworks */,
 				EAE9682DEA7C498E9B1B6E9B /* libRNVectorIcons.a in Frameworks */,
 				71BB104F6A5D4A1F9F37B878 /* libRCTSelectContact.a in Frameworks */,
+				D2C8DED0F03A4522AE98BC1E /* libSQLite.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,6 +615,7 @@
 				DFCFF3CAF16B4357B0EDB27E /* ReactNativeConfig.xcodeproj */,
 				FD8DD4F859FA453381D3D3CA /* RNVectorIcons.xcodeproj */,
 				F3A73B90C92548EC80D9CE09 /* SelectContact.xcodeproj */,
+				C83114926C9B4CFA95D39B16 /* SQLite.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -669,6 +682,10 @@
 				643870C022C04E879B6AB153 /* Octicons.ttf */,
 				33530F164C03443A926C666B /* SimpleLineIcons.ttf */,
 				6F7106774AF7484FA7CB1FD2 /* Zocial.ttf */,
+				C0D0DF1BE36A49379D20C721 /* Roboto-Light.ttf */,
+				6D39D9F0DE3741CBAC2113A3 /* Roboto-Medium.ttf */,
+				A70DC6A700EB45E488E31DFE /* Roboto-Regular.ttf */,
+				A12BC562F9A243788A8ADA6C /* Roboto-Thin.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1135,6 +1152,10 @@
 				9C8CE951BF604B56A13ECD67 /* Octicons.ttf in Resources */,
 				0B54E0BF30F54E5BB0501554 /* SimpleLineIcons.ttf in Resources */,
 				C07BD61CFA9946AEA1067780 /* Zocial.ttf in Resources */,
+				9DB1D0A29D3040C5A80A09BC /* Roboto-Light.ttf in Resources */,
+				8D5ECDD644814527B087E367 /* Roboto-Medium.ttf in Resources */,
+				D90FF978E0A24BCDA0870678 /* Roboto-Regular.ttf in Resources */,
+				1120779628CD4032B837D280 /* Roboto-Thin.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1273,12 +1294,14 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-select-contact\ios\RCTSelectContact",
+					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 				);
 			};
 			name = Debug;
@@ -1304,12 +1327,14 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-select-contact\ios\RCTSelectContact",
+					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 				);
 			};
 			name = Release;
@@ -1335,6 +1360,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-select-contact\ios\RCTSelectContact",
+					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 				);
 			};
 			name = Debug;
@@ -1359,6 +1385,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-select-contact\ios\RCTSelectContact",
+					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 				);
 			};
 			name = Release;
@@ -1392,12 +1419,14 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-select-contact\ios\RCTSelectContact",
+					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 				);
 			};
 			name = Debug;
@@ -1431,12 +1460,14 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-select-contact\ios\RCTSelectContact",
+					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 				);
 			};
 			name = Release;
@@ -1469,12 +1500,14 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-select-contact\ios\RCTSelectContact",
+					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 				);
 			};
 			name = Debug;
@@ -1507,12 +1540,14 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-select-contact\ios\RCTSelectContact",
+					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
 				);
 			};
 			name = Release;

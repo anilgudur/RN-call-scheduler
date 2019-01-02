@@ -91,6 +91,7 @@ const CallsTab = TabNavigator(
       activeTintColor: "white",
       inactiveTintColor: "#DDDDDD",
       labelStyle: {
+        fontFamily: "Roboto-Regular",
         fontSize: 12,
         margin: 0,
         padding: 0
@@ -205,13 +206,13 @@ export default class CallListScreen extends Component {
           style={[
             {
               padding: 10,
-              borderRadius: 30,
-              flex: 1
+              borderRadius: 30
+              //flex: 1
             }
           ]}
           background={Touchable.Ripple("blue", true)}
         >
-          <Icon name="add" color="white" size={25} />
+          <Icon name='add' color='white' size={25} />
         </Touchable>
       )
     };
