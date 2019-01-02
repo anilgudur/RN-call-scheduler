@@ -14,7 +14,8 @@ import {
   colors as stylesColors,
   global as gStyle,
   tabs as tabsStyle,
-  colors as colorsStyle
+  colors as colorsStyle,
+  values as styleValues
 } from "../../Styles/Styles";
 import moment from "moment";
 import { I18n } from "react-redux-i18n";
@@ -91,10 +92,14 @@ const CallsTab = TabNavigator(
       activeTintColor: "white",
       inactiveTintColor: "#DDDDDD",
       labelStyle: {
-        fontFamily: "Roboto-Regular",
+        fontFamily: styleValues.roboto_regular,
         fontSize: 12,
         margin: 0,
-        padding: 0
+        padding: 0,
+        lineHeight: 30
+      },
+      style: {
+        backgroundColor: "#3498DB"
       }
     }
   }
@@ -201,19 +206,23 @@ export default class CallListScreen extends Component {
         <MenuTitle navigation={navigation} titleName={"Call Planner"} />
       ),
       headerRight: (
-        <Touchable
-          onPress={() => navigate("AddCallRoute")}
-          style={[
-            {
-              padding: 10,
-              borderRadius: 30
-              //flex: 1
-            }
-          ]}
-          background={Touchable.Ripple("blue", true)}
-        >
-          <Icon name='add' color='white' size={25} />
-        </Touchable>
+        <View style={{ flex: 1 }}>
+          <Touchable
+            onPress={() => navigate("AddCallRoute")}
+            style={[
+              {
+                padding: 10,
+                borderRadius: 30
+              }
+            ]}
+            background={Touchable.Ripple(
+              stylesColors.touchable_ripple_color,
+              true
+            )}
+          >
+            <Icon name="add" color="white" size={25} />
+          </Touchable>
+        </View>
       )
     };
   };

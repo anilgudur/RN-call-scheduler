@@ -75,7 +75,10 @@ export class AddCallHeader extends Component {
               },
               css.addCallHeader.touchable
             ]}
-            background={Touchable.Ripple("blue", true)}
+            background={Touchable.Ripple(
+              css.colors.touchable_ripple_error_color,
+              true
+            )}
           >
             <View style={css.addCallHeader.touchableView}>
               <Icon
@@ -100,7 +103,10 @@ export class AddCallHeader extends Component {
               },
               css.addCallHeader.touchable
             ]}
-            background={Touchable.Ripple("blue", true)}
+            background={Touchable.Ripple(
+              css.colors.touchable_ripple_success_color,
+              true
+            )}
           >
             <View style={css.addCallHeader.touchableView}>
               <Icon
@@ -150,7 +156,7 @@ export class MenuIcon extends Component {
             padding: 10,
             borderRadius: 30
           }}
-          background={Touchable.Ripple("blue", true)}
+          background={Touchable.Ripple(css.colors.touchable_ripple_color, true)}
         >
           <Icon name="menu" color="white" size={25} />
         </Touchable>
@@ -172,7 +178,7 @@ export class BackIcon extends Component {
             padding: 10,
             borderRadius: 30
           }}
-          background={Touchable.Ripple("blue", true)}
+          background={Touchable.Ripple(css.colors.touchable_ripple_color, true)}
         >
           <Icon name="arrow-back" color="white" size={25} />
         </Touchable>

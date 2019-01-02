@@ -29,6 +29,7 @@ const {
 } = appConsts;
 import ValidationComponent from "../../Validator/index";
 import CallService from "../../Services/CallService";
+import Touchable from "react-native-platform-touchable";
 
 export default class AddCallScreen extends ValidationComponent {
   static propTypes = {
@@ -527,7 +528,7 @@ export default class AddCallScreen extends ValidationComponent {
             ]}
           >
             <TextInput
-              style={styles.input}
+              style={[styles.input]}
               placeholder="Contact name"
               placeholderTextColor={stylesColors.place_holder_text_color}
               selectionColor={stylesColors.selection_color}
@@ -537,14 +538,25 @@ export default class AddCallScreen extends ValidationComponent {
             />
           </View>
           <View style={styles.colRight}>
-            <Icon
-              name="person-add"
-              color={stylesColors.icon_color}
-              size={25}
+            <Touchable
               onPress={() => {
                 this.getPhoneNumber();
               }}
-            />
+              style={{
+                padding: 10,
+                borderRadius: 30
+              }}
+              background={Touchable.Ripple(
+                stylesColors.touchable_ripple_color,
+                true
+              )}
+            >
+              <Icon
+                name="person-add"
+                color={stylesColors.icon_color}
+                size={25}
+              />
+            </Touchable>
           </View>
         </View>
 

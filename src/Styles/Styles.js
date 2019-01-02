@@ -18,6 +18,9 @@ export const colors = {
   icon_color_disabled: "#BABABD",
   text_color_disabled: "#BABABD",
   text_color_enabled: "#4B4B4D",
+  touchable_ripple_color: "#3498DB",
+  touchable_ripple_success_color: "#2ECC71",
+  touchable_ripple_error_color: "#E74C3C",
 
   tintColor,
   tabIconDefault: "#ccc",
@@ -81,9 +84,9 @@ export const values = {
   roboto_medium: "Roboto-Medium",
 
   //OLD
-  font_regular: "roboto-regular", // Normal //'font_regular': 'NotoSans-Bold',
-  font_medium: "roboto-medium",
-  font_light: "roboto-medium", //'Roboto-Light', // BOLD //'font_light': 'NotoSans-Regular',
+  font_regular: "Roboto-Regular", // Normal //'font_regular': 'NotoSans-Bold',
+  font_medium: "Roboto-Medium",
+  font_light: "Roboto-Medium", //'Roboto-Light', // BOLD //'font_light': 'NotoSans-Regular',
   font_size_regular: 14,
   font_size_small: 12,
   font_size_smaller: 10,
@@ -150,7 +153,7 @@ export const addCallHeader = StyleSheet.create({
     alignContent: "center"
   },
   text: {
-    fontFamily: values.font_regular,
+    fontFamily: values.roboto_regular,
     color: colors.title_text_color,
     fontSize: values.font_size_regular,
     paddingLeft: 10,
@@ -168,7 +171,9 @@ export const global = StyleSheet.create({
     paddingLeft: 12
   },
   headerText: {
-    fontSize: 18
+    fontFamily: values.roboto_regular,
+    fontSize: 16,
+    color: "#4B4B4D"
   },
   radioRow: {
     paddingTop: 10,
@@ -180,7 +185,10 @@ export const global = StyleSheet.create({
     alignItems: "center"
   },
   radioLabel: {
-    paddingLeft: 5
+    paddingLeft: 10,
+    fontFamily: values.roboto_light,
+    fontSize: 13,
+    color: "#4B4B4D"
   },
 
   formValidationMessage: {
@@ -215,7 +223,10 @@ export const addCallScreen = StyleSheet.create({
     borderBottomWidth: 1
   },
   input: {
-    borderWidth: 0
+    borderWidth: 0,
+    fontFamily: values.roboto_regular,
+    fontSize: 14,
+    color: "#4B4B4D"
   },
   dateTimeContainer: {
     flex: 1,
@@ -324,7 +335,7 @@ export const call_listing_screen = StyleSheet.create({
       width: 1,
       height: 2
     },
-    elevation: 2
+    elevation: 1
   },
   task_process: {
     width: 90,
@@ -407,14 +418,14 @@ export const headers = StyleSheet.create({
   },
   text: {
     //paddingLeft: 10,
-    fontFamily: values.font_regular,
+    fontFamily: values.roboto_regular,
     color: colors.title_text_color,
     fontSize: values.font_size_regular,
     textAlign: "center"
   },
   tempText: {
     //paddingLeft: 10,
-    fontFamily: values.font_regular,
+    fontFamily: values.roboto_regular,
     color: colors.title_text_color,
     fontSize: values.font_size_regular
     //textAlign: 'center'
@@ -455,7 +466,7 @@ export const headerTwo = {
   },
   text: {
     //paddingLeft: 10,
-    fontFamily: values.font_regular,
+    fontFamily: values.roboto_regular,
     color: colors.title_text_color,
     fontSize: values.font_size_regular,
     textAlign: "center"

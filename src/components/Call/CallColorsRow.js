@@ -1,12 +1,14 @@
-import React, {Component } from 'react';
+import React, { Component } from "react";
 import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
-import PropTypes from 'prop-types';
-import { Icon } from 'react-native-elements';
-import { addCallScreen as styles, colors as stylesColors } from '../../Styles/Styles';
-import { appConsts } from '../../constants';
-const {
-  callColors
-} = appConsts;
+import PropTypes from "prop-types";
+import { Icon } from "react-native-elements";
+import {
+  addCallScreen as styles,
+  colors as stylesColors
+} from "../../Styles/Styles";
+import { appConsts } from "../../constants";
+const { callColors } = appConsts;
+import Touchable from "react-native-platform-touchable";
 
 // const styles = StyleSheet.create({
 //   container: {
@@ -33,14 +35,13 @@ const {
 // });
 
 export default class CallColorsRow extends Component {
-
   static propTypes = {
     //item: PropTypes.arrayOf(PropTypes.object).isRequired,
     //item: PropTypes.array.isRequired,
 
-    onColorSelect: PropTypes.func.isRequired,
+    onColorSelect: PropTypes.func.isRequired
     //onColorSelect_Back: PropTypes.func.isRequired
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -62,9 +63,26 @@ export default class CallColorsRow extends Component {
     //console.log('keyColor ::> ', keyColor);
 
     return (
-      <Icon name={this.props.color == valColor ? 'check-circle' : 'fiber-manual-record'} color={varColor} size={45}
-      onPress={() => {this.onColorSelect(valColor);}}
-      />
-    )
+      <Touchable
+        onPress={() => {
+          this.onColorSelect(valColor);
+        }}
+        style={{
+          //padding: 10,
+          borderRadius: 15
+        }}
+        background={Touchable.Ripple(varColor, true)}
+      >
+        <Icon
+          name={
+            this.props.color == valColor
+              ? "check-circle"
+              : "fiber-manual-record"
+          }
+          color={varColor}
+          size={45}
+        />
+      </Touchable>
+    );
   }
 }

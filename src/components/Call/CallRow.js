@@ -99,9 +99,7 @@ export default class CallRow extends Component {
       >
         <View
           style={{
-            //flex:1
             paddingRight: 15,
-            paddingTop: 6,
             alignContent: "center"
           }}
         >
@@ -117,7 +115,8 @@ export default class CallRow extends Component {
               { fontSize: 22, fontFamily: "Roboto-Light" },
               callColors[color] === "#FFFFFF"
                 ? { color: "#000000" }
-                : { color: "#FFFFFF" }
+                : { color: "#FFFFFF" },
+              { paddingBottom: 2 }
             ]}
             containerStyle={{ marginLeft: 6 }}
             overlayContainerStyle={[
@@ -160,8 +159,8 @@ export default class CallRow extends Component {
               >
                 {item.recurring_type_id !== 1 && (
                   <Icon
-                    name='autorenew'
-                    color='#01C853'
+                    name="autorenew"
+                    color="#01C853"
                     size={15}
                     containerStyle={[
                       item.recurring_type_id !== 1 ? { paddingRight: 5 } : {}
@@ -178,7 +177,7 @@ export default class CallRow extends Component {
         <View style={{ width: 40 }}>
           <OptionsMenu
             //customButton={<Icon name="more-vert" color="#333333" size={20} />}
-            customButton={<Icon name='more-vert' color='#7F8C8D' size={20} />}
+            customButton={<Icon name="more-vert" color="#7F8C8D" size={20} />}
             destructiveIndex={1}
             options={["Edit", "Move to Completed", "Delete"]}
             actions={[
@@ -202,9 +201,12 @@ export default class CallRow extends Component {
               padding: 10,
               borderRadius: 30
             }}
-            background={Touchable.Ripple("blue", true)}
+            background={Touchable.Ripple(
+              stylesColors.touchable_ripple_color,
+              true
+            )}
           >
-            <Icon name='call' color='#4C4C4C' size={20} containerStyle={{}} />
+            <Icon name="call" color="#4C4C4C" size={20} containerStyle={{}} />
           </Touchable>
         </View>
       </View>

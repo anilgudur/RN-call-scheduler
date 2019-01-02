@@ -34,3 +34,13 @@ export class CallListNoteText extends Component {
     );
   }
 }
+
+export class aaText extends Component {
+  render() {
+    return (
+      <Text style={AppTextStyle.CallListNoteText} {...this.props}>
+        {this.props.children}
+      </Text>
+    );
+  }
+}
